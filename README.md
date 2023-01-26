@@ -7,11 +7,14 @@ A compiler for our language Shrek-- inspired by the DreamWorks Movie Shrek.
 
 ## Examples:
 
-    Getout of (mySwamp(donkey))~
-
-    is equivilant to JS
-
-    if (false) {}
+    shilling = int
+    enchanted = public
+    cursed = private
+    Donkey = String
+    Pinoccio = boolean
+    truth = true
+    lie = false
+    Ogre = Class
 
 ## About the Authors:
 
