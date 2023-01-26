@@ -1,0 +1,26 @@
+{
+  "name": "shrek--",
+  "version": "1.0.0",
+  "description": "A compiler for Shrek--",
+  "main": "Shrek--.js",
+  "scripts": {
+    "test": "c8 mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/claytoncb/Shrek--.git"
+  },
+  "keywords": [
+    "compiler",
+    "shrek",
+    "dreamworks",
+    "donkey",
+    "homework"
+  ],
+  "author": "Clayton Bruce, Sung Jae Ko, Dylan Lim",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/claytoncb/Shrek--/issues"
+  },
+  "homepage": "https://github.com/claytoncb/Shrek--#readme"
+}
