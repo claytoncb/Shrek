@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A compiler for Shrek--",
   "main": "Shrek--.js",
+  "type": "module",
   "scripts": {
     "test": "c8 mocha"
   },
@@ -22,5 +23,12 @@
   "bugs": {
     "url": "https://github.com/claytoncb/Shrek--/issues"
   },
-  "homepage": "https://github.com/claytoncb/Shrek--#readme"
+  "homepage": "https://github.com/claytoncb/Shrek--#readme",
+  "devDependencies": {
+    "c8": "^7.12.0",
+    "mocha": "^10.2.0"
+  },
+  "dependencies": {
+    "ohm-js": "^16.6.0"
+  }
 }
