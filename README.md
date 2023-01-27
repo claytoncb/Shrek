@@ -39,5 +39,5 @@
 
 ## About the Authors:
 <div>
-    Clayton Bruce is is an Oregonian who Enjoyed Shrek and other DreamWorks movies as a child. He frequently uses javascript and python and hopes to bring some form of pythonic list comprehensions to Shrek--. 
+    Clayton Bruce is is an Oregonian who Enjoyed Shrek and other DreamWorks movies as a child. He frequently uses javascript and python and hopes to bring coding to a new audience of Shrek fans. 
 </div>
