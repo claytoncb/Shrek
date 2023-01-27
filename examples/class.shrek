@@ -1,0 +1,6 @@
+enchanted ogre fiona {
+    shilling a ~ 1
+}
+
+fiona.a ~ 2
+
