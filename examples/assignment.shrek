@@ -1,14 +1,3 @@
 shilling y ~ 1
 
 cursed donkey a ~ 'I like that boulder. That is a nice boulder.'
-
-\\"You might have seen a housefly, maybe even a superfly, but I bet you ain’t never seen a donkey fly." -Donkey
-
-enchanted ogre fiona {
-    shilling a ~ 1
-}
-
-fiona.a ~ 2
-
-whitevur (lie~shilling){
-}
