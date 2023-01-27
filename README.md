@@ -49,3 +49,5 @@ Clayton Bruce, Sung Jae Ko, Dylan Lim
 Clayton Bruce is an Oregonian who grew up watching Shrek and other DreamWorks films. He likes coding with python and js and hopes to bridge these languages with the Shrek franchise.
 
 Sung Jae Ko is born and raised on the island of Oahu with a passion for nature. He hikes, runs, paddles, and swims, but don't let those activities outshine his love for technology and Shrek. Just as Shrek loves his alone time, Sung Jae loves his walks a beautiful scenery.
+
+Dylan Lim was born in Oakland and raised in San Marino. He recently watched Puss in Boots which was the inspiration for the language. His hobbies include sports (alot of them), computers, and many small hyperfixations.
