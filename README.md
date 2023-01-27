@@ -7,7 +7,7 @@
 </div>
 
 
-## Examples:
+## Features:
 
 <div>
     Shrekk-- is written using curly brace styling and borrows the idea of public and private identifiers from java. 
@@ -27,6 +27,8 @@
     Python:
     [x for x in list if (condition)]
 </div>
+
+## Examples:
 
     shilling = int
     enchanted = public
