@@ -18,6 +18,15 @@
     Java:
     public int x = 3;
 </div>
+<div>
+    Shrekk-- also uses pythonic list comprehensions (https://lingojam.com/ShrekSlang). 
+    
+    Shrek--:
+    <x fur x in list whitevur (condition)>
+    
+    Python:
+    [x for x in list if (condition)]
+</div>
 
     shilling = int
     enchanted = public
