@@ -1,12 +1,27 @@
 <h1>Shrek--</h1>
 <img src="doc/shrek--Logo2.0.png">
-A compiler for our language Shrek-- inspired by the DreamWorks Movie Shrek and extended universe.
-
 
 ## Description:
-    Shrek-- is asdasd
+<div>
+    A compiler for our language Shrek-- inspired by the DreamWorks Movie Shrek and extended universe. It hopes to make coding fun and memorable by making references to the mistical world of Shrek. 
+</div>
+
 
 ## Examples:
+
+<div>
+    Shrekk-- is written using curly brace styling and borrows the idea of public and private identifiers from java. 
+    
+    Shrek--:
+    <>
+    enchanted x ~ 3
+    <>
+    
+    Java:
+    <>
+    public int x = 3;
+    <>
+</div>
 
     shilling = int
     enchanted = public
