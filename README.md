@@ -13,14 +13,10 @@
     Shrekk-- is written using curly brace styling and borrows the idea of public and private identifiers from java. 
     
     Shrek--:
-    <div>
     enchanted x ~ 3
-    </div>
     
     Java:
-    <div>
     public int x = 3;
-    </div>
 </div>
 
     shilling = int
