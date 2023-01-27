@@ -18,5 +18,6 @@ A compiler for our language Shrek-- inspired by the DreamWorks Movie Shrek and e
     Ogre = Class
 
 ## About the Authors:
-
+<div>
     Clayton Bruce is is an Oregonian who Enjoyed Shrek and other DreamWorks movies as a child. He frequently uses javascript and python and hopes to bring some form of pythonic list comprehensions to Shrek--. 
+</div>
