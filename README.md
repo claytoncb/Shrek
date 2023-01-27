@@ -3,7 +3,7 @@
 
 ## Description:
 <div>
-    A compiler for our language Shrek-- inspired by the DreamWorks Movie Shrek and extended universe. It hopes to make coding fun and memorable by making references to the mistical world of Shrek. 
+    A compiler for our language Shrek-- inspired by the DreamWorks Movie Shrek and extended universe. It hopes to make coding fun and memorable by making references to the mistical world of Shrek. We hope also to make coding more intuitive and enjoyable for shrek fans.
 </div>
 
 
@@ -39,7 +39,6 @@
     lie = false
     Ogre = Class
 
-## About the Authors:
-<div>
-    Clayton Bruce is is an Oregonian who Enjoyed Shrek and other DreamWorks movies as a child. He frequently uses javascript and python and hopes to make coding more intuitive and enjoyable for shrek fans. 
-</div>
+## Authors:
+
+Clayton Bruce, Sung Jae Ko, Dylan Lim
