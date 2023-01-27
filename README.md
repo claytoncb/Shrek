@@ -4,7 +4,7 @@ A compiler for our language Shrek-- inspired by the DreamWorks Movie Shrek and e
 
 
 ## Description:
-
+    Shrek-- is asdasd
 
 ## Examples:
 
@@ -19,3 +19,4 @@ A compiler for our language Shrek-- inspired by the DreamWorks Movie Shrek and e
 
 ## About the Authors:
 
+    Clayton Bruce is is an Oregonian who Enjoyed Shrek and other DreamWorks movies as a child. He frequently uses javascript and python and hopes to bring some form of pythonic list comprehensions to Shrek--. 
