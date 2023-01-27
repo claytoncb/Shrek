@@ -7,7 +7,7 @@ Clayton Bruce, Sung Jae Ko, Dylan Lim
 
 ## Description:
 <div>
-    A compiler for our language Shrek-- inspired by the DreamWorks Movie Shrek and extended universe. We hope to make coding fun and memorable by making references to the mistical world of Shrek. We hope also to make coding more intuitive and enjoyable for shrek fans.
+    A compiler for our language Shrek-- inspired by the DreamWorks Movie Shrek and extended universe. We hope to make coding more memorable by making references to the mistical world of Shrek. As Shrek fans, we also hope also to make coding more enjoyable for shrek fans by including references to the movies and also using some ogre dialect.
 </div>
 
 
@@ -42,3 +42,8 @@ Clayton Bruce, Sung Jae Ko, Dylan Lim
     truth = true
     lie = false
     Ogre = Class
+    
+    
+## About The Authors
+
+Clayton Bruce is an Oregonian who grew up watching Shrek and other DreamWorks films. He likes coding with python and js and hopes to bridge these languages with the Shrek franchise.
