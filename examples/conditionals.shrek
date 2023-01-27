@@ -4,3 +4,7 @@ whitevur (x) {
 } else {
 
 }
+
+until (x >~ y) {
+
+}
