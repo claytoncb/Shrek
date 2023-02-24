@@ -1,6 +1,6 @@
 shilling y ~ 1
-
-cursed Donkey a = 'I like that boulder. That is a nice boulder.'
+shill f ~ 1.5
+cursed donkey a ~ 'I like that boulder. That is a nice boulder.'
 
 Donkey.fly
 
