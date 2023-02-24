@@ -1,0 +1,66 @@
+Shrek {
+  Program
+    = Statement (";" (Statement ";")*)?
+   
+  Statement
+      = DataType
+      | Assignment
+    | Call
+    | Exp
+ 
+  DataType
+      = Structure | List
+   
+  Structure
+      = "ogre" "{" Program? "}"
+   
+  List
+    = "<"  (Statement+ ("," Statement)*)? ">"
+   
+  Assignment
+      = id "~" (DataType | Exp)
+   
+  Call
+      = id "(" (Exp+ ("," Exp)*)? ")"
+   
+  id
+      = ~keyword letter+ (letter | digit | "_")*
+   
+  Exp
+    = AddExp
+    | stringLiteral
+    | id
+    | Call
+   
+  stringLiteral
+      = "\"" (~"\"" any)* "\""
+
+  AddExp
+    = AddExp "+" MulExp  -- plus
+    | AddExp "-" MulExp  -- minus
+    | MulExp
+
+  MulExp
+    = MulExp "*" ExpExp  -- times
+    | MulExp "/" ExpExp  -- divide
+    | ExpExp
+
+  ExpExp
+    = PriExp "**" ExpExp  -- power
+    | PriExp
+    | "-" PriExp   -- neg
+
+  PriExp
+    = "(" Exp ")"  -- paren
+    | "+" PriExp   -- pos
+    | Call
+    | id
+    | number
+
+
+  number  (a number)
+    = digit* "." digit+  -- fract
+    | digit+             -- whole
+   
+  keyword = "keyword"
+}
