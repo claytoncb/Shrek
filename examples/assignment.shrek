@@ -1,16 +1,12 @@
-shilling y ~ 1
-shill f ~ 1.5
-cursed donkey a ~ 'I like that boulder. That is a nice boulder.'
-
-Donkey.fly
+y : 1;
+f : 1.5;
+cursed donkey : "I like that boulder. That is a nice boulder.";
 
 \\"You might have seen a housefly, maybe even a superfly, but I bet you ain’t never seen a donkey fly." -Donkey
 
-enchanted Ogre c {
-    shilling a ~ 1
-}
+enchanted c : ogre {
+    enchanted a : 1
+};
 
-fiona.a ~ 2
-
-Pinoccio x ~ lie
-Pinoccio y ~ truth
+y ~ 2;
+f->a
