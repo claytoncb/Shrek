@@ -1,66 +1,64 @@
 Shrek {
   Program
-    = Statement (";" (Statement ";")*)?
+    = Statement (";"  Statement)* ";"?
    
-  Statement
-      = DataType
-      | Assignment
+  Statement = Declaration
+    | Assignment
+    | DataType
     | Call
     | Exp
  
-  DataType
-      = Structure | List
+  DataType = Structure
+  	| List
    
-  Structure
-      = "ogre" "{" Program? "}"
+  Structure = ogre "{" Program? "}"
+      
+  List = "<"  (Statement+ ("," Statement)*)? ">"
    
-  List
-    = "<"  (Statement+ ("," Statement)*)? ">"
+  Assignment = id "~" (DataType | Exp)	--byValue
+  	| id "->" id	--byReference
+  
+  Declaration = (enchanted | cursed) id	--declare
+  	| id ":" (Exp | DataType)	--assignment
    
-  Assignment
-      = id "~" (DataType | Exp)
+  Call = id "(" (Exp+ ("," Exp)*)? ")"
    
-  Call
-      = id "(" (Exp+ ("," Exp)*)? ")"
+  id = ~keyword letter(letter | digit | "_")*
    
-  id
-      = ~keyword letter+ (letter | digit | "_")*
-   
-  Exp
-    = AddExp
+  Exp = AddExp
     | stringLiteral
     | id
     | Call
    
-  stringLiteral
-      = "\"" (~"\"" any)* "\""
+  stringLiteral = "\"" (~"\"" any)* "\""
 
-  AddExp
-    = AddExp "+" MulExp  -- plus
+  AddExp = AddExp "+" MulExp  -- plus
     | AddExp "-" MulExp  -- minus
     | MulExp
 
-  MulExp
-    = MulExp "*" ExpExp  -- times
+  MulExp = MulExp "*" ExpExp  -- times
     | MulExp "/" ExpExp  -- divide
     | ExpExp
 
-  ExpExp
-    = PriExp "**" ExpExp  -- power
+  ExpExp = PriExp "**" ExpExp  -- power
     | PriExp
     | "-" PriExp   -- neg
 
-  PriExp
-    = "(" Exp ")"  -- paren
+  PriExp = "(" Exp ")"  -- paren
     | "+" PriExp   -- pos
     | Call
     | id
     | number
 
 
-  number  (a number)
-    = digit* "." digit+  -- fract
+  number  (a number) = digit* "." digit+  -- fract
     | digit+             -- whole
    
-  keyword = "keyword"
+  keyword = ogre
+  
+  ogre = "ogre"
+  
+  enchanted = "enchanted"
+  
+  cursed = "cursed"
 }
