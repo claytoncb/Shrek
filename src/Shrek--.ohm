@@ -19,7 +19,7 @@ Shrek {
   	| id "->" id	--byReference
   
   Declaration = (enchanted | cursed) id	--declare
-  	| id ":" (Exp | DataType)	--assignment
+  	| (enchanted | cursed)? id ":" (Exp | DataType)	--assignment
    
   Call = id "(" (Exp+ ("," Exp)*)? ")"
    
