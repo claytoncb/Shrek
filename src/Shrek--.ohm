@@ -10,6 +10,7 @@ Shrek {
  
   DataType = Structure
   	| List
+    | stringLiteral
    
   Structure = ogre "{" Program? "}"
       
@@ -18,8 +19,9 @@ Shrek {
   Assignment = id "~" (DataType | Exp)	--byValue
   	| id "->" id	--byReference
   
-  Declaration = (enchanted | cursed) id	--declare
-  	| (enchanted | cursed)? id ":" (Exp | DataType)	--assignment
+  Declaration = (enchanted | cursed)? id ":" (Exp | DataType)	--assignment
+  	| (enchanted | cursed) id	--declare
+  	
    
   Call = id "(" (Exp+ ("," Exp)*)? ")"
    
@@ -61,4 +63,5 @@ Shrek {
   enchanted = "enchanted"
   
   cursed = "cursed"
-}
+  space    += "\\" (~"\n" any)* "\n"	--comment
+  }
