@@ -57,6 +57,7 @@ export default function analyze(sourceCode) {
       return new core.Program(body.rep());
     },
     Declaration_Assignment(accessibility, id, _colon, value) {
+      context.add(id.sourceString, value.rep())
       return core.Declaration_Assignment(
         accessibility.rep(),
         id.rep(),
@@ -64,13 +65,16 @@ export default function analyze(sourceCode) {
       );
     },
     Declaration_Declare(accessibility, id) {
-      return core.Declaration_Declare(accessibility.rep(), id.rep(), null);
+      context.add(id.sourceString, id.rep(), false)
+      return core.Declaration_Declare(accessibility.rep(), id.rep());
     },
-    Assignment_Value(id, _tilda, accessibility) {
-      return core.Assignment_Value(id.rep(), accessibility.rep());
+    Assignment_byValue(id, _tilda, value) {
+      context.locals[id.sourceString] = value.rep()
+      return core.Assignment_byValue(id.rep(), value.rep());
     },
-    Assignment_Reference(id, _arrow, id_value) {
-      return core.Assignment_value(id.rep(), id_value.rep());
+    Assignment_byReference(id, _arrow, id_value) {
+      context.locals[id.sourceString] = context.locals[id_value.sourceString]
+      return core.Assignment_byReference(id.rep(), id_value.rep());
     },
     Datatype(data) {
       return core.Datatype(data.rep());
