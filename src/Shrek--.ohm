@@ -7,6 +7,8 @@ Shrek {
     | DataType
     | Call
     | Exp
+    | stringLiteral
+    | id
  
   DataType = Structure
   	| List
@@ -27,38 +29,44 @@ Shrek {
    
   id = ~keyword letter(letter | digit | "_")*
    
-  Exp = AddExp
-    | stringLiteral
-    | id
-    | Call
    
   stringLiteral = "\"" (~"\"" any)* "\""
 
-  AddExp = AddExp "+" MulExp  -- plus
-    | AddExp "-" MulExp  -- minus
-    | MulExp
+  Exp       = ("-" | "!") Exp7                        -- unary
+            | Exp1 "?" Exp1 ":" Exp                   -- ternary
+            | Exp1
+  Exp1      = Exp1 "||" Exp2                          -- binary
+            | Exp2
+  Exp2      = Exp2 "&&" Exp3                          -- binary
+            | Exp3
+  Exp3      = Exp4 ("<="|"<"|"=="|"!="|">="|">") Exp4 -- binary
+            | Exp4
+  Exp4      = Exp4 ("+" | "-") Exp5                   -- binary
+            | Exp5
+  Exp5      = Exp5 ("*" | "/" | "%") Exp6             -- binary
+            | Exp6
+  Exp6      = Exp7 "**" Exp6                          -- binary
+            | Exp7
+  Exp7      = num
+            | true
+            | false
+            | Call
+            | id                                      -- id
+            | "(" Exp ")"                             -- parens
 
-  MulExp = MulExp "*" ExpExp  -- times
-    | MulExp "/" ExpExp  -- divide
-    | ExpExp
 
-  ExpExp = PriExp "**" ExpExp  -- power
-    | PriExp
-    | "-" PriExp   -- neg
-
-  PriExp = "(" Exp ")"  -- paren
-    | "+" PriExp   -- pos
-    | Call
-    | id
-    | number
-
-
-  number  (a number) = digit* "." digit+  -- fract
+  num = digit* "." digit+  -- fract
     | digit+             -- whole
    
   keyword = ogre
+  	| true
+    | false
   
   ogre = "ogre"
+  
+  true = "true"
+  
+  false = "false"
   
   enchanted = "enchanted"
   
