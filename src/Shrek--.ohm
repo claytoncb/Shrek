@@ -48,8 +48,8 @@ Shrek {
   Exp6      = Exp7 "**" Exp6                          -- binary
             | Exp7
   Exp7      = num
-            | true
-            | false
+            | truth
+            | lie
             | Call
             | id                                      -- id
             | "(" Exp ")"                             -- parens
@@ -59,14 +59,14 @@ Shrek {
     | digit+             -- whole
    
   keyword = ogre
-  	| true
-    | false
+  	| truth
+    | lie
   
   ogre = "ogre"
   
-  true = "true"
+  truth = "truth"
   
-  false = "false"
+  lie = "lie"
   
   enchanted = "enchanted"
   
