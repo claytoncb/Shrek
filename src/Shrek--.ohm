@@ -2,7 +2,10 @@ Shrek {
   Program
     = Statement (";"  Statement)* ";"?
    
-  Statement = Declaration
+  Statement = Object
+    | Operation
+    
+ Object = Declaration
     | Assignment
     | DataType
     | Call
@@ -10,13 +13,25 @@ Shrek {
     | stringLiteral
     | id
  
+ Operation = Conditional
+    | UntilLoop
+    | ListComprehension
+ 
   DataType = Structure
   	| List
     | stringLiteral
    
-  Structure = ogre "{" Program? "}"
+  Structure = ogre List? Block
+  
+  Conditional = whitevur Block (otherwise Block)* (else Block)?
+  
+  UntilLoop = until ("(" Statement? ")") Conditional? Block
+  
+  Block = "{" Program? "}"
       
   List = "<"  (Statement+ ("," Statement)*)? ">"
+  
+  ListComprehension = Block for Object
    
   Assignment = id "~" (DataType | Exp)	--byValue
   	| id "->" id	--byReference
@@ -61,6 +76,12 @@ Shrek {
   keyword = ogre
   	| truth
     | lie
+    | else
+    | whitevur
+    | otherwise
+    | until
+    | theEnd
+    | for
   
   ogre = "ogre"
   
@@ -68,7 +89,19 @@ Shrek {
   
   lie = "lie"
   
+  until = "until"
+  
+  else = "else"
+  
+  theEnd = "theEnd"
+  
+  whitevur = "whitevur"
+  
   enchanted = "enchanted"
+  
+  otherwise = "otherwise"
+  
+  for="for"
   
   cursed = "cursed"
   space    += "\\" (~"\n" any)* "\n"	--comment
