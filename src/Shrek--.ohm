@@ -1,12 +1,14 @@
 Shrek {
   Program
-    = Statement (";"  Statement)* ";"?
-   
-  Statement = Object
-    | Operation
+    = ListOf<Summons,"\n"> ListOf<Statement,";"> ";"?
     
- Object = Declaration
-    | Assignment
+  Summons =  summon ("{" ListOf<id,","> "}")? from stringLiteral
+   
+  Statement = Operation
+    | Object
+    
+ Object = id "." id List?	--member
+    | ListComprehension
     | DataType
     | Call
     | Exp
@@ -15,35 +17,36 @@ Shrek {
  
  Operation = Conditional
     | UntilLoop
-    | ListComprehension
+    | return Statement --return
+    | Declaration
+    | Assignment
  
-  DataType = Structure
+  DataType = Ogre
   	| List
     | stringLiteral
    
-  Structure = ogre List? Block
+  Ogre = ogre List? Block
   
-  Conditional = whitevur Block (otherwise Block)* (else Block)?
+  Conditional = whitevur Object Block (otherwise Object Block)* (else Block)?
   
   UntilLoop = until ("(" Statement? ")") Conditional? Block
   
-  Block = "{" Program? "}"
+  Block = "{" Program "}"
       
-  List = "<"  (Statement+ ("," Statement)*)? ">"
+  List = "("  ListOf<Statement,","> ")"
   
   ListComprehension = Block for Object
    
-  Assignment = id "~" (DataType | Exp)	--byValue
-  	| id "->" id	--byReference
-  
-  Declaration = (enchanted | cursed)? id ":" (Exp | DataType)	--assignment
+  Assignment = id "~" Object	--byValue
+  	| id "->" Object	--byReference
+
+  Declaration = (enchanted | cursed)? id ":" Object	--assignment
   	| (enchanted | cursed) id	--declare
   	
    
   Call = id "(" (Exp+ ("," Exp)*)? ")"
    
   id = ~keyword letter(letter | digit | "_")*
-   
    
   stringLiteral = "\"" (~"\"" any)* "\""
 
@@ -82,6 +85,8 @@ Shrek {
     | until
     | theEnd
     | for
+    | tau
+    | return
   
   ogre = "ogre"
   
@@ -101,8 +106,17 @@ Shrek {
   
   otherwise = "otherwise"
   
-  for="for"
+  for = "for"
   
   cursed = "cursed"
-  space    += "\\" (~"\n" any)* "\n"	--comment
+
+  tau = "tau"
+  
+  return = "return"
+  
+  summon = "summon"
+  
+  from = "from"
+  
+  space    += "\\" (~"\n" any)* "\n"?	--comment
   }
