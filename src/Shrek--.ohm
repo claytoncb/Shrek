@@ -1,14 +1,13 @@
 Shrek {
   Program
-    = ListOf<Summons,"\n"> ListOf<Statement,";"> ";"?
+    = (ListOf<Summons,";"> ";")? ListOf<Statement,";"> ";"?
     
-  Summons =  summon ("{" ListOf<id,","> "}")? from stringLiteral
+  Summons =  summon ("{" ListOf<id,","> "}" from)? stringLiteral
    
   Statement = Operation
     | Object
     
- Object = id "." id List?	--member
-    | ListComprehension
+ Object = id "." (objectKeyword | id) List?	--member
     | DataType
     | Call
     | Exp
@@ -33,18 +32,19 @@ Shrek {
   
   Block = "{" Program "}"
       
-  List = "("  ListOf<Statement,","> ")"
+  List = "(" ListComprehension ")" --ListComprehension 
+  	| "("  ListOf<Prop,","> ")"	--List
+    
+  Prop = ((id ":")? Statement)
   
-  ListComprehension = Block for Object
+  ListComprehension = List Block fur Object
    
-  Assignment = id "~" Object	--byValue
-  	| id "->" Object	--byReference
+  Assignment = id ("~"|"->") Object	--byValue
 
-  Declaration = (enchanted | cursed)? id ":" Object	--assignment
-  	| (enchanted | cursed) id	--declare
+  Declaration = (enchanted | cursed)? typeExp id (("~" |"->") Object)?	--assignment
   	
    
-  Call = id "(" (Exp+ ("," Exp)*)? ")"
+  Call = id List
    
   id = ~keyword letter(letter | digit | "_")*
    
@@ -84,7 +84,7 @@ Shrek {
     | otherwise
     | until
     | theEnd
-    | for
+    | fur
     | tau
     | return
   
@@ -106,7 +106,7 @@ Shrek {
   
   otherwise = "otherwise"
   
-  for = "for"
+  fur = "fur"
   
   cursed = "cursed"
 
@@ -117,6 +117,32 @@ Shrek {
   summon = "summon"
   
   from = "from"
+  
+  objectKeyword = sing
+  	| typeProp
+    | value
+    
+  sing = "sing"
+  
+  typeProp = "type"
+  
+  value = "value"
+  
+  typeExp = typeExp ("+"|"-") type	--binary
+  	| type
+  
+  type = shilling
+    | ogreType
+  	| pinoccio
+    | anyType
+    
+  shilling="Shilling"
+  
+  pinoccio ="Pinoccio"
+  
+  ogreType = "Ogre"
+  
+  anyType = "Any"
   
   space    += "\\" (~"\n" any)* "\n"?	--comment
   }
