@@ -8,28 +8,42 @@ Clayton Bruce, Sung Jae Ko, Dylan Lim
 ## Description:
 <div>
     A compiler for our language Shrek-- inspired by the DreamWorks Movie Shrek and extended universe. We hope to make coding more memorable by making references to the mistical world of Shrek. As Shrek fans, we also hope also to make coding more enjoyable for shrek fans by including references to the movies and also using some ogre dialect.
+
+    Shrek-- uses types, curley brace styling, and variable scope modifiers like Java
 </div>
 
 
 ## Features:
 
 <div>
-    Shrekk-- is written using curly brace styling and borrows the idea of public and private identifiers from java. 
+    Shrek-- allows users to declare variables as follows, fairly similarly to Java:
     
     Shrek--:
-    enchanted x ~ 3
+    enchanted Shilling x ~ 3
     
     Java:
     public int x = 3;
+
+    Shrek however, distinguishes assignment by reference (using "->") and assignment by value (using "~")
 </div>
 <div>
     Shrekk-- also uses pythonic list comprehensions (shout out https://lingojam.com/ShrekSlang). 
     
     Shrek--:
-    <x fur x in list whitevur (condition)>
+    ((x) {whitevur (truth) {return x}} fur list)
     
     Python:
-    [x for x in list if (condition)]
+    [x for x in list if true]
+</div>
+
+<div>
+    Shrekk-- easily allows for binary operations on Types. 
+    
+    Shrek--:
+    cursed Any-Shilling a ~ "3 bling mice";
+
+    cursed Shilling + Str + Pinoccio a ~ 4;
+    
 </div>
 
 ## Examples:

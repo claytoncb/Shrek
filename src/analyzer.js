@@ -5,159 +5,202 @@
 // context. The root context, which contains the pre-declared identifiers and
 // any globals, has a parent of null.
 
-import fs from "fs"
-import ohm from "ohm-js"
-import * as core from "./core.js"
+import fs from "fs";
+import ohm from "ohm-js";
+import * as core from "./core.js";
 
 const bellaGrammar = ohm.grammar(fs.readFileSync("src/Shrek.ohm"))
 
 // Throw an error message that takes advantage of Ohm's messaging
 function error(message, node) {
   if (node) {
-    throw new Error(`${node.source.getLineAndColumnMessage()}${message}`)
+    throw new Error(`${node.source.getLineAndColumnMessage()}${message}`);
   }
-  throw new Error(message)
+  throw new Error(message);
 }
 
 function check(condition, message, node) {
-  if (!condition) error(message, node)
+  if (!condition) error(message, node);
 }
 
 class Context {
   constructor(parent = null) {
-    this.parent = parent
-    this.locals = new Map()
+    this.parent = parent;
+    this.locals = new Map();
   }
   add(name, entity, node) {
-    check(!this.locals.has(name), `${name} has already been declared`, node)
-    this.locals.set(name, entity)
-    return entity
+    check(!this.locals.has(name), `${name} has already been declared`, node);
+    this.locals.set(name, entity);
+    return entity;
   }
   get(name, expectedType, node) {
-    let entity
+    let entity;
     for (let context = this; context; context = context.parent) {
-      entity = context.locals.get(name)
-      if (entity) break
+      entity = context.locals.get(name);
+      if (entity) break;
     }
-    check(entity, `${name} has not been declared`, node)
+    check(entity, `${name} has not been declared`, node);
     check(
       entity.constructor === expectedType,
       `${name} was expected to be a ${expectedType.name}`,
       node
-    )
-    return entity
+    );
+    return entity;
   }
 }
 
 export default function analyze(sourceCode) {
-  let context = new Context()
+  let context = new Context();
 
   const analyzer = bellaGrammar.createSemantics().addOperation("rep", {
     Program(body) {
-      return new core.Program(body.rep())
+      return new core.Program(body.rep());
     },
+    Declaration_Assignment(accessibility, id, _colon, value) {
+      context.add(id.sourceString, value.rep())
+      return core.Declaration_Assignment(
+        accessibility.rep(),
+        id.rep(),
+        value.rep()
+      );
+    },
+    Declaration_Declare(accessibility, id) {
+      context.add(id.sourceString, id.rep(), false)
+      return core.Declaration_Declare(accessibility.rep(), id.rep());
+    },
+    Assignment_byValue(id, _tilda, value) {
+      context.locals[id.sourceString] = value.rep()
+      return core.Assignment_byValue(id.rep(), value.rep());
+    },
+    Assignment_byReference(id, _arrow, id_value) {
+      context.locals[id.sourceString] = context.locals[id_value.sourceString]
+      return core.Assignment_byReference(id.rep(), id_value.rep());
+    },
+    Datatype(data) {
+      return core.Datatype(data.rep());
+    },
+    Call(id, _leftParens, args, _rightParens) {
+      return core.Call(id.rep(), args.asIteration().rep());
+    },
+    Exp(data) {
+      return core.Exp(data.rep());
+    },
+
     Statement_vardec(_let, id, _eq, initializer, _semicolon) {
       // Analyze the initializer *before* adding the variable to the context,
       // because we don't want the variable to come into scope until after
       // the declaration. That is, "let x=x;" should be an error (unless x
       // was already defined in an outer scope.)
-      const initializerRep = initializer.rep()
-      const variable = new core.Variable(id.sourceString, false)
-      context.add(id.sourceString, variable, id)
-      return new core.VariableDeclaration(variable, initializerRep)
+      const initializerRep = initializer.rep();
+      const variable = new core.Variable(id.sourceString, false);
+      context.add(id.sourceString, variable, id);
+      return new core.VariableDeclaration(variable, initializerRep);
     },
-    Statement_fundec(_fun, id, _open, params, _close, _equals, body, _semicolon) {
-      params = params.asIteration().children
-      const fun = new core.Function(id.sourceString, params.length, true)
+    Statement_fundec(
+      _fun,
+      id,
+      _open,
+      params,
+      _close,
+      _equals,
+      body,
+      _semicolon
+    ) {
+      params = params.asIteration().children;
+      const fun = new core.Function(id.sourceString, params.length, true);
       // Add the function to the context before analyzing the body, because
       // we want to allow functions to be recursive
-      context.add(id.sourceString, fun, id)
-      context = new Context(context)
-      const paramsRep = params.map(p => {
-        let variable = new core.Variable(p.sourceString, true)
-        context.add(p.sourceString, variable, p)
-        return variable
-      })
-      const bodyRep = body.rep()
-      context = context.parent
-      return new core.FunctionDeclaration(fun, paramsRep, bodyRep)
+      context.add(id.sourceString, fun, id);
+      context = new Context(context);
+      const paramsRep = params.map((p) => {
+        let variable = new core.Variable(p.sourceString, true);
+        context.add(p.sourceString, variable, p);
+        return variable;
+      });
+      const bodyRep = body.rep();
+      context = context.parent;
+      return new core.FunctionDeclaration(fun, paramsRep, bodyRep);
     },
     Statement_assign(id, _eq, expression, _semicolon) {
-      const target = id.rep()
-      check(!target.readOnly, `${target.name} is read only`, id)
-      return new core.Assignment(target, expression.rep())
+      const target = id.rep();
+      check(!target.readOnly, `${target.name} is read only`, id);
+      return new core.Assignment(target, expression.rep());
     },
     Statement_print(_print, argument, _semicolon) {
-      return new core.PrintStatement(argument.rep())
+      return new core.PrintStatement(argument.rep());
     },
     Statement_while(_while, test, body) {
-      return new core.WhileStatement(test.rep(), body.rep())
+      return new core.WhileStatement(test.rep(), body.rep());
     },
     Block(_open, body, _close) {
-      return body.rep()
+      return body.rep();
     },
     Exp_unary(op, operand) {
-      return new core.UnaryExpression(op.rep(), operand.rep())
+      return new core.UnaryExpression(op.rep(), operand.rep());
     },
     Exp_ternary(test, _questionMark, consequent, _colon, alternate) {
-      return new core.Conditional(test.rep(), consequent.rep(), alternate.rep())
+      return new core.Conditional(
+        test.rep(),
+        consequent.rep(),
+        alternate.rep()
+      );
     },
     Exp1_binary(left, op, right) {
-      return new core.BinaryExpression(op.rep(), left.rep(), right.rep())
+      return new core.BinaryExpression(op.rep(), left.rep(), right.rep());
     },
     Exp2_binary(left, op, right) {
-      return new core.BinaryExpression(op.rep(), left.rep(), right.rep())
+      return new core.BinaryExpression(op.rep(), left.rep(), right.rep());
     },
     Exp3_binary(left, op, right) {
-      return new core.BinaryExpression(op.rep(), left.rep(), right.rep())
+      return new core.BinaryExpression(op.rep(), left.rep(), right.rep());
     },
     Exp4_binary(left, op, right) {
-      return new core.BinaryExpression(op.rep(), left.rep(), right.rep())
+      return new core.BinaryExpression(op.rep(), left.rep(), right.rep());
     },
     Exp5_binary(left, op, right) {
-      return new core.BinaryExpression(op.rep(), left.rep(), right.rep())
+      return new core.BinaryExpression(op.rep(), left.rep(), right.rep());
     },
     Exp6_binary(left, op, right) {
-      return new core.BinaryExpression(op.rep(), left.rep(), right.rep())
+      return new core.BinaryExpression(op.rep(), left.rep(), right.rep());
     },
     Exp7_parens(_open, expression, _close) {
-      return expression.rep()
+      return expression.rep();
     },
     Call(callee, left, args, _right) {
-      const fun = context.get(callee.sourceString, core.Function, callee)
-      const argsRep = args.asIteration().rep()
+      const fun = context.get(callee.sourceString, core.Function, callee);
+      const argsRep = args.asIteration().rep();
       check(
         argsRep.length === fun.paramCount,
         `Expected ${fun.paramCount} arg(s), found ${argsRep.length}`,
         left
-      )
-      return new core.Call(fun, argsRep)
+      );
+      return new core.Call(fun, argsRep);
     },
     id(_first, _rest) {
       // Designed to get here only for ids in expressions
-      return context.get(this.sourceString, core.Variable, this)
+      return context.get(this.sourceString, core.Variable, this);
     },
     true(_) {
-      return true
+      return true;
     },
     false(_) {
-      return false
+      return false;
     },
     num(_whole, _point, _fraction, _e, _sign, _exponent) {
-      return Number(this.sourceString)
+      return Number(this.sourceString);
     },
     _terminal() {
-      return this.sourceString
+      return this.sourceString;
     },
     _iter(...children) {
-      return children.map(child => child.rep())
+      return children.map((child) => child.rep());
     },
-  })
+  });
 
   for (const [name, entity] of Object.entries(core.standardLibrary)) {
-    context.locals.set(name, entity)
+    context.locals.set(name, entity);
   }
-  const match = bellaGrammar.match(sourceCode)
-  if (!match.succeeded()) error(match.message)
-  return analyzer(match).rep()
+  const match = bellaGrammar.match(sourceCode);
+  if (!match.succeeded()) error(match.message);
+  return analyzer(match).rep();
 }
