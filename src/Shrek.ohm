@@ -12,6 +12,7 @@ Shrek {
               | return Exp ";"                                --return
               | return ";"                                    --shortreturn
               | WhitevurStmt
+              | LoopStmt
 
   VarDecl     = (enchanted | cursed) id ("~"|"->") Exp ";"
   TypeDecl    = struct id "{" Field* "}"
@@ -27,6 +28,10 @@ Shrek {
   WhitevurStmt      = whitevur Exp Block otherwise Block                       --long
               | whitevur Exp Block otherwise WhitevurStmt                      --elsif
               | whitevur Exp Block                                  --short
+  LoopStmt    = while Exp Block                               --while
+              | repeat Exp Block                              --repeat
+              | for id in Exp ("..." | "..<") Exp Block       --range
+              | for id in Exp Block                           --collection
   Block       = "{" Statement* "}"
 
   Exp         = Exp1 "?" Exp1 ":" Exp                         --conditional
@@ -91,6 +96,7 @@ Shrek {
   no          = "no" ~alnum
   truth        = "truth" ~alnum
   lie       = "lie" ~alnum
+  for       = "for" ~alnum
   keyword     = enchanted | cursed | struct | ogre | whitevur | otherwise | while | repeat
               | in | of | theEnd | return | some | no | truth | lie
   id          = ~keyword letter alnum*
