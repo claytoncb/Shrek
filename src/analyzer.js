@@ -9,7 +9,7 @@ import fs from "fs"
 import ohm from "ohm-js"
 import * as core from "./core.js"
 
-const bellaGrammar = ohm.grammar(fs.readFileSync("src/bella.ohm"))
+const bellaGrammar = ohm.grammar(fs.readFileSync("src/Shrek.ohm"))
 
 // Throw an error message that takes advantage of Ohm's messaging
 function error(message, node) {

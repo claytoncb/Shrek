@@ -1,0 +1,99 @@
+Shrek {
+  Program     = Statement+
+
+  Statement   = VarDecl
+              | TypeDecl
+              | FunDecl
+              | Exp9 ("++" | "--") ";"                        --bump
+              | Exp9 "~" Exp ";"                              --assign_val
+              | Exp9 "->" Exp ";"                              --assign_ref
+              | Exp9_call ";"                                 --call
+              | theEnd ";"                                     --break
+              | return Exp ";"                                --return
+              | return ";"                                    --shortreturn
+              | WhitevurStmt
+
+  VarDecl     = (enchanted | cursed) id ("~"|"->") Exp ";"
+  TypeDecl    = struct id "{" Field* "}"
+  Field       = id ":" Type
+  FunDecl     = ogre id "(" ListOf<Param, ","> ")" (":" Type)? Block
+  Param       = id ":" Type
+
+  Type        = Type "?"                                      --optional
+              | "[" Type "]"                                  --array
+              | "(" ListOf<Type, ","> ")" "->" Type           --function
+              | id                                            --id
+
+  WhitevurStmt      = whitevur Exp Block otherwise Block                       --long
+              | whitevur Exp Block otherwise WhitevurStmt                      --elsif
+              | whitevur Exp Block                                  --short
+  Block       = "{" Statement* "}"
+
+  Exp         = Exp1 "?" Exp1 ":" Exp                         --conditional
+              | Exp1
+  Exp1        = Exp1 "?:" Exp2                                --unwrapelse
+              | Exp2
+  Exp2        = Exp3 ("||" Exp3)+                             --or
+              | Exp3 ("&&" Exp3)+                             --and
+              | Exp3
+  Exp3        = Exp4 ("|" Exp4)+                              --bitor
+              | Exp4 ("^" Exp4)+                              --bitxor
+              | Exp4 ("&" Exp4)+                              --bitand
+              | Exp4
+  Exp4        = Exp5 ("<="|"<"|"=="|"!="|">="|">") Exp5       --compare
+              | Exp5
+  Exp5        = Exp5 ("<<" | ">>") Exp6                       --shift
+              | Exp6
+  Exp6        = Exp6 ("+" | "-") Exp7                         --add
+              | Exp7
+  Exp7        = Exp7 ("*"| "/" | "%") Exp8                    --multiply
+              | Exp8
+  Exp8        = Exp9 "**" Exp8                                --power
+              | Exp9
+              | ("#" | "-" | "!" | some) Exp9                 --unary
+  Exp9        = truth ~mut
+              | lie ~mut
+              | floatlit ~mut
+              | intlit ~mut
+              | no Type ~mut                                  --emptyopt
+              | Exp9 ("(" | "?(") ListOf<Exp, ","> ")" ~mut   --call
+              | Exp9 ("[" | "?[") Exp "]"                     --subscript
+              | Exp9 ("." | "?.") id                          --member
+              | stringlit ~mut
+              | id                                            --id
+              | "[]" "(" of Type ")" ~mut                     --emptyarray
+              | "[" NonemptyListOf<Exp, ","> "]" ~mut         --arrayexp
+              | "(" Exp ")" ~mut                              --parens
+
+  intlit      = digit+
+  floatlit    = digit+ "." digit+ (("E" | "e") ("+" | "-")? digit+)?
+  stringlit   = "\"" char* "\""
+  char        = ~control ~"\\" ~"\"" any
+              | "\\" ("n" | "t" | "\"" | "\\")                --escape
+              | "\\u{" hex hex? hex? hex? hex? hex? "}"       --codepoint
+  control     = "\x00".."\x1f" | "\x80".."\x9f"
+  hex         = hexDigit
+  mut         = ~"==" "=" | "++" | "--"
+
+  enchanted         = "enchanted" ~alnum
+  cursed       = "cursed" ~alnum
+  struct      = "struct" ~alnum
+  ogre    = "ogre" ~alnum
+  whitevur   = "whitevur" ~alnum
+  otherwise        = "otherwise" ~alnum
+  while       = "while" ~alnum
+  repeat      = "repeat" ~alnum
+  in          = "in" ~alnum
+  of          = "of" ~alnum
+  theEnd       = "theEnd" ~alnum
+  return      = "return" ~alnum
+  some        = "some" ~alnum
+  no          = "no" ~alnum
+  truth        = "truth" ~alnum
+  lie       = "lie" ~alnum
+  keyword     = enchanted | cursed | struct | ogre | whitevur | otherwise | while | repeat
+              | in | of | theEnd | return | some | no | truth | lie
+  id          = ~keyword letter alnum*
+
+  space      += "//" (~"\n" any)*                             --comment
+}
