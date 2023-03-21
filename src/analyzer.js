@@ -149,7 +149,7 @@ function mustBeInAFunction(context, at) {
 function mustBeCallable(e, at) {
   must(
     e instanceof core.StructType || e.type.constructor == core.FunctionType,
-    "Call of non-function or non-constructor",
+    "Call of non-ogre",
     at
   )
 }
@@ -510,7 +510,7 @@ export default function analyze(sourceCode) {
       return new core.UnaryExpression(o, x, type)
     },
 
-    Exp9_emptyarray(_keyword, _left, _of, type, _right) {
+    Exp9_emptyarray( _left, type, _right, _keyword) {
       return new core.EmptyArray(type.rep())
     },
 

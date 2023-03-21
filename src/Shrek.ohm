@@ -23,6 +23,8 @@ Shrek {
   Type        = Type "?"                                      --optional
               | "[" Type "]"                                  --array
               | "(" ListOf<Type, ","> ")" "->" Type           --function
+              | "(" ListOf<Type, ","> ")"                     --product
+              | "(" ListOf<Type, "+"> ")"                     --sum
               | id                                            --id
 
   WhitevurStmt      = whitevur Exp Block otherwise Block                       --long
@@ -66,7 +68,7 @@ Shrek {
               | Exp9 ("." | "?.") id                          --member
               | stringlit ~mut
               | id                                            --id
-              | "[]" "(" of Type ")" ~mut                     --emptyarray
+              | "(" Type ")" "[]"  ~mut                     --emptyarray
               | "[" NonemptyListOf<Exp, ","> "]" ~mut         --arrayexp
               | "(" Exp ")" ~mut                              --parens
 
