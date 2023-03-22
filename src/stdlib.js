@@ -23,5 +23,5 @@ export const contents = Object.freeze({
   exp: new Function("exp", floatFloatType),
   ln: new Function("ln", floatFloatType),
   hypot: new Function("hypot", floatFloatFloatType),
-  bytes: new Function("bytes", stringToIntsType),
+  bytes: new Function("bytes", stringToIntsType)
 })
