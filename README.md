@@ -65,3 +65,7 @@ Clayton Bruce is an Oregonian who grew up watching Shrek and other DreamWorks fi
 Sung Jae Ko is born and raised on the island of Oahu with a passion for nature. He hikes, runs, paddles, and swims, but don't let those activities outshine his love for technology and Shrek. Just as Shrek loves his alone time, Sung Jae loves his walks a beautiful scenery.
 
 Dylan Lim was born in Oakland and raised in San Marino. He recently watched Puss in Boots which was the inspiration for the language. His hobbies include sports (alot of them), computers, and many small hyperfixations.
+
+## Links to Github repo and pages 
+Link to Github repo of the compiler: https://github.com/claytoncb/Shrek/blob/main/src/compiler.js
+Link to Github Pages: https://claytoncb.github.io/Shrek/
