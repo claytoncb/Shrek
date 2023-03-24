@@ -67,5 +67,5 @@ Sung Jae Ko is born and raised on the island of Oahu with a passion for nature. 
 Dylan Lim was born in Oakland and raised in San Marino. He recently watched Puss in Boots which was the inspiration for the language. His hobbies include sports (alot of them), computers, and many small hyperfixations.
 
 ## Links to Github repo and pages 
-Link to Github repo of the compiler: https://github.com/claytoncb/Shrek/blob/main/src/compiler.js <br>
-Link to Github Pages: https://claytoncb.github.io/Shrek/
+Link to [Github repo of the compiler:](https://github.com/claytoncb/Shrek/blob/main/src/compiler.js) <br>
+Link to [Github Pages:](https://claytoncb.github.io/Shrek/)
