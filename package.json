@@ -1,16 +1,17 @@
 {
-  "name": "shrek--",
+  "name": "shrek",
   "version": "1.0.0",
-  "description": "A compiler for Shrek--",
+  "description": "A compiler for Shrek",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "c8 mocha",
+    "build": "react-scripts build",
     "start": "react-scripts start"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/claytoncb/Shrek--.git"
+    "url": "git+https://github.com/claytoncb/Shrek.git"
   },
   "keywords": [
     "compiler",
@@ -22,7 +23,7 @@
   "author": "Clayton Bruce, Sung Jae Ko, Dylan Lim",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/claytoncb/Shrek--/issues"
+    "url": "https://github.com/claytoncb/Shrek/issues"
   },
   "homepage": "/",
   "devDependencies": {
