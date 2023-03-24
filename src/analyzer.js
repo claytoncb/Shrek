@@ -55,7 +55,7 @@ function mustHaveAStructType(e, at) {
 
 function mustHaveOptionalStructType(e, at) {
   must(
-    e.type instanceof core.OptionalType && e.type.baseType.constructor == core.StructType,
+    e.type instanceof core.OptionalType && e.type.sumType.constructor == core.StructType,
     "Expected an optional struct",
     at
   )
@@ -89,12 +89,15 @@ function mustNotBeRecursive(struct, at) {
 function equivalent(t1, t2) {
   return (
     t1 === t2 ||
+    (t1 instanceof core.SumType &&
+      t2 instanceof core.SumType &&
+      t1.sumType.some((t, i) => equivalent(t, t2.sumType[i]))) ||
     (t1 instanceof core.OptionalType &&
       t2 instanceof core.OptionalType &&
-      equivalent(t1.baseType, t2.baseType)) ||
+      t1.sumType.some((t, i) => equivalent(t, t2.sumType[i]))) ||
     (t1 instanceof core.ArrayType &&
       t2 instanceof core.ArrayType &&
-      equivalent(t1.baseType, t2.baseType)) ||
+      equivalent(t1.sumType, t2.sumType)) ||
     (t1.constructor === core.FunctionType &&
       t2.constructor === core.FunctionType &&
       equivalent(t1.returnType, t2.returnType) &&
@@ -254,16 +257,24 @@ export default function analyze(sourceCode) {
       return new core.Variable(id.sourceString, false, type.rep())
     },
 
-    Type_optional(baseType, _questionMark) {
-      return new core.OptionalType(baseType.rep())
+    Type_optional(baseTypes, _questionMark) {
+      return new core.OptionalType(baseTypes.asIteration().rep())
     },
 
-    Type_array(_left, baseType, _right) {
-      return new core.ArrayType(baseType.rep())
+    Type_sum(_left, baseTypes, _right) {
+      return new core.SumType(baseTypes.asIteration().rep())
     },
 
-    Type_function(_left, inTypes, _right, _arrow, outType) {
-      return new core.FunctionType(inTypes.asIteration().rep(), outType.rep())
+    Type_product(_left, baseTypes, _right) {
+      return new core.ProductType(baseTypes.asIteration().rep())
+    },
+
+    Type_array(_left, baseTypes, _right) {
+      return new core.ArrayType(baseTypes.asIteration().rep())
+    },
+
+    Type_function(_left, inTypes, _right, _arrow, outTypes) {
+      return new core.FunctionType(inTypes.asIteration().rep(), outTypes.asIteration().rep())
     },
 
     Type_id(id) {
@@ -372,7 +383,7 @@ export default function analyze(sourceCode) {
       const [x, y] = [low.rep(), high.rep()]
       mustHaveIntegerType(x)
       mustHaveIntegerType(y)
-      const iterator = new core.Variable(id.sourceString, SHILLING, true)
+      const iterator = new core.Variable(id.sourceString, true, SHILLING)
       context = context.newChildContext({ inLoop: true })
       context.add(id.sourceString, iterator)
       const b = body.rep()
@@ -383,7 +394,7 @@ export default function analyze(sourceCode) {
     LoopStmt_collection(_for, id, _in, collection, body) {
       const c = collection.rep()
       mustHaveAnArrayType(c)
-      const i = new core.Variable(id.sourceString, true, c.type.baseType)
+      const i = new core.Variable(id.sourceString, true, c.type.sumType)
       context = context.newChildContext({ inLoop: true })
       context.add(i.name, i)
       const b = body.rep()
@@ -407,7 +418,7 @@ export default function analyze(sourceCode) {
     Exp1_unwrapelse(unwrap, op, alternate) {
       const [x, o, y] = [unwrap.rep(), op.sourceString, alternate.rep()]
       mustHaveAnOptionalType(x)
-      mustBeAssignable(y, { toType: x.type.baseType })
+      mustBeAssignable(y, { toType: x.type.sumType })
       return new core.BinaryExpression(o, x, y, x.type)
     },
 
@@ -511,7 +522,7 @@ export default function analyze(sourceCode) {
     },
 
     Exp9_emptyarray( _left, type, _right, _keyword) {
-      return new core.EmptyArray(type.rep())
+      return new core.EmptyArray(type.asIteration().rep())
     },
 
     Exp9_arrayexp(_left, args, _right) {
@@ -530,8 +541,8 @@ export default function analyze(sourceCode) {
 
     Exp9_subscript(array, _left, subscript, _right) {
       const [a, i] = [array.rep(), subscript.rep()]
-      mustHaveAnArrayType(a)
-      mustHaveIntegerType(i)
+      //mustHaveAnArrayType(a)
+      //mustHaveIntegerType(i)
       return new core.SubscriptExpression(a, i)
     },
 
@@ -541,7 +552,7 @@ export default function analyze(sourceCode) {
       let structType
       if (isOptional) {
         mustHaveOptionalStructType(x)
-        structType = x.type.baseType
+        structType = x.type.sumType
       } else {
         mustHaveAStructType(x)
         structType = x.type
