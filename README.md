@@ -1,5 +1,5 @@
 <h1>Shrek</h1>
-<img src="doc/shrekLogo2.0.png"/>
+<img src="doc/shrekLogo2.0.png">
 
 ## Authors:
 
