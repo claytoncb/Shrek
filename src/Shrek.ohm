@@ -6,7 +6,7 @@ Shrek {
               | FunDecl
               | Exp9 ("++" | "--") ";"                        --bump
               | Exp9 "~" Exp ";"                              --assign_val
-              | Exp9 "=>" Exp ";"                              --assign_ref
+              | Exp9 "->" Exp ";"                              --assign_ref
               | Exp9_call ";"                                 --call
               | theEnd ";"                                     --break
               | return Exp ";"                                --return
@@ -14,18 +14,18 @@ Shrek {
               | WhitevurStmt
               | LoopStmt
 
-  VarDecl     = (enchanted | cursed) id ("~"|"=>") Exp ";"
+  VarDecl     = (enchanted | cursed) id ("~"|"->") Exp ";"
   TypeDecl    = struct id "{" Field* "}"
   Field       = id ":" Type
   FunDecl     = ogre id "(" ListOf<Param, ","> ")" (":" Type)? Block
   Param       = id ":" Type
 
-  Type        = ListOf<Type, ","> "?"                                      --optional
-              | "[" ListOf<Type, ","> "]"                                  --array
-              | "(" ListOf<Type, ","> ")" "->" ListOf<Type, ",">          --function
+  Type        = Type "?"                                      --optional
+              | "[" Type "]"                                  --array
+              | "(" ListOf<Type, ","> ")" "->" Type           --function
               | "(" ListOf<Type, ","> ")"                     --product
               | "(" ListOf<Type, "+"> ")"                     --sum
-              | ListOf<id, ",">                                            --id
+              | id                                            --id
 
   WhitevurStmt      = whitevur Exp Block otherwise Block                       --long
               | whitevur Exp Block otherwise WhitevurStmt                      --elsif

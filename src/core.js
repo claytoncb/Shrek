@@ -76,19 +76,11 @@ export class Function {
   }
 }
 
-export class SumType extends Type {
-  // Example: string?
-  constructor(baseTypes) {
-    super(`(${baseTypes.map(t => t.description).join("+")})`)
-    this.sumType = baseTypes
-  }
-}
-
 export class ArrayType extends Type {
-  // Example: [int, string?]
-  constructor(baseTypes) {
-    super(`[${baseTypes.map(t => t.description).join(",")}]`)
-    this.sumTypes = [baseTypes]
+  // Example: [int]
+  constructor(baseType) {
+    super(`[${baseType.description}]`)
+    this.baseType = baseType
   }
 }
 
@@ -100,12 +92,11 @@ export class FunctionType extends Type {
   }
 }
 
-
-
-export class OptionalType extends SumType {
+export class OptionalType extends Type {
   // Example: string?
   constructor(baseType) {
-    super([baseType, Type.VOID])
+    super(`${baseType.description}?`)
+    this.baseType = baseType
   }
 }
 
@@ -212,7 +203,7 @@ export class UnaryExpression {
 export class EmptyOptional {
   // Example: no int
   constructor(baseType) {
-    this.sumType = baseType
+    this.baseType = baseType
     this.type = new OptionalType(baseType)
   }
 }
@@ -221,7 +212,7 @@ export class SubscriptExpression {
   // Example: a[20]
   constructor(array, index) {
     Object.assign(this, { array, index })
-    this.type = array.type.sumTypes
+    this.type = array.type.baseType
   }
 }
 
@@ -229,18 +220,15 @@ export class ArrayExpression {
   // Example: ["Emma", "Norman", "Ray"]
   constructor(elements) {
     this.elements = elements
-    let types = []
-    elements.forEach(e=>{types.push(e.type)})
-    types = new Set(types)
-    this.type = new ArrayType([...types])
+    this.type = new ArrayType(elements[0].type)
   }
 }
 
 export class EmptyArray {
   // Example: [](of float)
-  constructor(baseTypes) {
-    this.sumType = [...baseTypes]
-    this.type = new ArrayType([...baseTypes])
+  constructor(baseType) {
+    this.baseType = baseType
+    this.type = new ArrayType(baseType)
   }
 }
 

@@ -2,12 +2,10 @@
   "name": "shrek",
   "version": "1.0.0",
   "description": "A compiler for Shrek",
-  "main": "index.js",
+  "main": "Shrek--.js",
   "type": "module",
   "scripts": {
-    "test": "c8 mocha",
-    "build": "react-scripts build",
-    "start": "react-scripts start"
+    "test": "c8 mocha"
   },
   "repository": {
     "type": "git",
@@ -25,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/claytoncb/Shrek/issues"
   },
-  "homepage": "/",
+  "homepage": "https://github.com/claytoncb/Shrek--#readme",
   "devDependencies": {
     "c8": "^7.12.0",
     "mocha": "^10.2.0"
@@ -33,17 +31,5 @@
   "dependencies": {
     "graph-stringify": "^1.0.1",
     "ohm-js": "^16.6.0"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }
