@@ -6,7 +6,7 @@ Shrek {
               | FunDecl
               | Exp9 ("++" | "--") ";"                        --bump
               | Exp9 "~" Exp ";"                              --assign_val
-              | Exp9 "->" Exp ";"                              --assign_ref
+              | Exp9 "<-" Exp ";"                              --assign_ref
               | Exp9_call ";"                                 --call
               | theEnd ";"                                     --break
               | return Exp ";"                                --return
