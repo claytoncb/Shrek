@@ -114,8 +114,15 @@ export class Decrement {
   }
 }
 
-export class Assignment {
-  // Example: a[z].p = 50 * 22 ** 3 - x
+export class AssignmentVal {
+  // Example: a[z].p ~ 50 * 22 ** 3 - x
+  constructor(target, source) {
+    Object.assign(this, { target, source })
+  }
+}
+
+export class AssignmentRef {
+  // Example: a[z].p <- b[x].w
   constructor(target, source) {
     Object.assign(this, { target, source })
   }

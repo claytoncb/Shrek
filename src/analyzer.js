@@ -285,7 +285,7 @@ export default function analyze(sourceCode) {
       const v = variable.rep()
       mustBeAssignable(e, { toType: v.type })
       mustNotBeReadOnly(v)
-      return new core.Assignment(v, e)
+      return new core.AssignmentVal(v, e)
     },
 
     Statement_assign_ref(variable, _eq, expressionVariable, _semicolon) {
