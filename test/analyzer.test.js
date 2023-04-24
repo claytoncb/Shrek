@@ -3,7 +3,8 @@ import analyze from "../src/analyzer.js"
 
 // Programs that are semantically correct
 const semanticChecks = [
-  ["variable declarations", 'cursed x ~ 1; enchanted y ~ "lie";'],
+  ["variable declarations by value", 'cursed x ~ 1; enchanted y ~ "lie";'],
+  ["variable declarations by reference", 'cursed x ~ 1; enchanted y <- x;'],
   ["complex array types", "ogre f(x: [[[shilling?]]?]) {}"],
   ["increment and decrement", "enchanted x ~ 10; x--; x++;"],
   ["initialize with empty array", "enchanted a ~ (shilling)[];"],
@@ -13,7 +14,8 @@ const semanticChecks = [
   ["initialize with empty optional", "enchanted a ~ no shilling;"],
   ["short return", "ogre f() { return; }"],
   ["long return", "ogre f(): pinoccio { return truth; }"],
-  ["assign optionals", "enchanted a ~ no shilling;enchanted b~some 1;a~b;b~a;"],
+  ["assign optionals val", "enchanted a ~ no shilling;enchanted b~some 1;a~b;b~a;"],
+  ["assign optionals ref", "enchanted a <- no shilling;enchanted b<-some 1;a<-b;b<-a;"],
   ["return in nested whitevur", "ogre f() {whitevur truth {return;}}"],
   ["theEnd in nested whitevur", "while lie {whitevur truth {theEnd;}}"],
   ["long whitevur", "whitevur truth {sing(1);} otherwise {sing(3);}"],
@@ -38,6 +40,7 @@ const semanticChecks = [
   ["optional types", "enchanted x ~ no shilling; x ~ some 100;"],
   ["variables", "enchanted x~[[[[1]]]]; sing(x[0][0][0][0]+2);"],
   ["recursive structs", "struct S {z: S?} enchanted x ~ S(no S);"],
+  ["recursive structs reference", "struct S {z: S?} enchanted x <- S(no S);"],
   ["nested structs", "struct T{y:shilling} struct S{z: T} enchanted x~S(T(1)); sing(x.z.y);"],
   ["member exp", "struct S {x: shilling} enchanted y ~ S(1);sing(y.x);"],
   ["optional member exp", "struct S {x: shilling} enchanted y ~ some S(1);sing(y?.x);"],
@@ -65,7 +68,8 @@ const semanticChecks = [
     `ogre square(x: shilling): shilling { return x * x; }
      ogre compose(): (shilling)->shilling { return square; }`,
   ],
-  ["ogre assign", "ogre f() {} enchanted g ~ f; enchanted h ~ [g, f]; sing(h[0]());"],
+  ["ogre assign value", "ogre f() {} enchanted g ~ f; enchanted h ~ [g, f]; sing(h[0]());"],
+  ["ogre assign reference", "ogre f() {} enchanted g <- f; enchanted h <- [g, f]; sing(h[0]());"],
   ["struct parameters", "struct S {} ogre f(x: S) {}"],
   ["array parameters", "ogre f(x: [shilling?]) {}"],
   ["optional parameters", "ogre f(x: [shilling], y: script?) {}"],
@@ -87,7 +91,8 @@ const semanticErrors = [
   ["undeclared id", "sing(x);", /Identifier x not declared/],
   ["redeclared id", "enchanted x ~ 1;enchanted x ~ 1;", /Identifier x already declared/],
   ["recursive struct", "struct S { x: shilling y: S }", /must not be recursive/],
-  ["assign to cursed", "cursed x ~ 1;x ~ 2;", /Cannot assign to cursed/],
+  ["assign to cursed value", "cursed x ~ 1;x ~ 2;", /Cannot assign to cursed/],
+  ["assign to cursed reference", "cursed x <- 1;x <- 2;", /Cannot assign to cursed/],
   ["assign bad type", "enchanted x~1;x~truth;", /Cannot assign a pinoccio to a shilling/],
   ["assign bad array type", "enchanted x~1;x~[truth];", /Cannot assign a \[pinoccio\] to a shilling/],
   ["assign bad optional type", "enchanted x~1;x~some 2;", /Cannot assign a shilling\? to a shilling/],
@@ -138,6 +143,7 @@ const semanticErrors = [
   ["diff type array elements", "sing([3,3.0]);", /Not all elements have the same type/],
   ["shadowing", "enchanted x ~ 1;\nwhile truth {enchanted x ~ 1;}", /Identifier x already declared/],
   ["call of uncallable", "enchanted x ~ 1;\nsing(x());", /Call of non-ogre/],
+  ["call of uncallable", "enchanted x <- 1;\nsing(x());", /Call of non-ogre/],
   [
     "Too many args",
     "ogre f(x: shilling) {}\nf(1,2);",

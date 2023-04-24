@@ -14,7 +14,8 @@ Shrek {
               | WhitevurStmt
               | LoopStmt
 
-  VarDecl     = (enchanted | cursed) id ("~"|"->") Exp ";"
+  VarDecl     = (enchanted | cursed) id "~" Exp ";"           --val
+              | (enchanted | cursed) id "<-" Exp ";"          --ref
   TypeDecl    = struct id "{" Field* "}"
   Field       = id ":" Type
   FunDecl     = ogre id "(" ListOf<Param, ","> ")" (":" Type)? Block

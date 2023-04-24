@@ -43,7 +43,12 @@ export default function generate(program) {
     Program(p) {
       gen(p.statements)
     },
-    VariableDeclaration(d) {
+    VariableDeclarationVal(d) {
+      // We don't care about const vs. let in the generated code! The analyzer has
+      // already checked that we never updated a const, so let is always fine.
+      output.push(`let ${gen(d.variable)} = ${[gen(d.initializer)][0]};`)
+    },
+    VariableDeclarationRef(d) {
       // We don't care about const vs. let in the generated code! The analyzer has
       // already checked that we never updated a const, so let is always fine.
       output.push(`let ${gen(d.variable)} = ${gen(d.initializer)};`)
@@ -85,7 +90,7 @@ export default function generate(program) {
     Decrement(s) {
       output.push(`${gen(s.variable)}--;`)
     },
-    Assignment(s) {
+    AssignmentVal(s) {
       output.push(`${gen(s.target)} = ${[gen(s.source)][0]};`)
     },
     AssignmentRef(s) {

@@ -214,12 +214,20 @@ export default function analyze(sourceCode) {
       return new core.Program(body.rep())
     },
 
-    VarDecl(modifier, id, _eq, initializer, _semicolon) {
+    VarDecl_val(modifier, id, _eq, initializer, _semicolon) {
       const e = initializer.rep()
       const readOnly = modifier.sourceString === "cursed"
       const v = new core.Variable(id.sourceString, readOnly, e.type)
       context.add(id.sourceString, v)
-      return new core.VariableDeclaration(v, e)
+      return new core.VariableDeclarationVal(v, e)
+    },
+
+    VarDecl_ref(modifier, id, _eq, initializer, _semicolon) {
+      const e = initializer.rep()
+      const readOnly = modifier.sourceString === "cursed"
+      const v = new core.Variable(id.sourceString, readOnly, e.type)
+      context.add(id.sourceString, v)
+      return new core.VariableDeclarationRef(v, e)
     },
 
     TypeDecl(_struct, id, _left, fields, _right) {

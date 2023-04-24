@@ -11,7 +11,14 @@ export class Program {
   }
 }
 
-export class VariableDeclaration {
+export class VariableDeclarationRef {
+  // Example: const dozen = 12;
+  constructor(variable, initializer) {
+    Object.assign(this, { variable, initializer })
+  }
+}
+
+export class VariableDeclarationVal {
   // Example: const dozen = 12;
   constructor(variable, initializer) {
     Object.assign(this, { variable, initializer })
