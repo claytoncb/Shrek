@@ -9,7 +9,7 @@ const grammar = ohm.grammar(fs.readFileSync("src/Shrek.ohm"))
 const SHILLING = core.Type.SHILLING
 const SHILLINGF = core.Type.SHILLINGF
 const SCRIPT = core.Type.SCRIPT
-const PINOCCIO = core.Type.PINOCCIO
+const PINOCCHIO = core.Type.PINOCCHIO
 const ANY = core.Type.ANY
 const VOID = core.Type.VOID
 
@@ -34,7 +34,7 @@ function mustHaveNumericOrStringType(e, at) {
 }
 
 function mustHaveBooleanType(e, at) {
-  must(e.type === PINOCCIO, "Expected a pinoccio", at)
+  must(e.type === PINOCCHIO, "Expected a pinocchio", at)
 }
 
 function mustHaveIntegerType(e, at) {
@@ -424,7 +424,7 @@ export default function analyze(sourceCode) {
       mustHaveBooleanType(x)
       for (let y of ys) {
         mustHaveBooleanType(y)
-        x = new core.BinaryExpression(o, x, y, PINOCCIO)
+        x = new core.BinaryExpression(o, x, y, PINOCCHIO)
       }
       return x
     },
@@ -434,7 +434,7 @@ export default function analyze(sourceCode) {
       mustHaveBooleanType(x)
       for (let y of ys) {
         mustHaveBooleanType(y)
-        x = new core.BinaryExpression(o, x, y, PINOCCIO)
+        x = new core.BinaryExpression(o, x, y, PINOCCHIO)
       }
       return x
     },
@@ -473,7 +473,7 @@ export default function analyze(sourceCode) {
       const [x, o, y] = [left.rep(), op.sourceString, right.rep()]
       if (["<", "<=", ">", ">="].includes(op.sourceString)) mustHaveNumericOrStringType(x)
       mustBeTheSameType(x, y)
-      return new core.BinaryExpression(o, x, y, PINOCCIO)
+      return new core.BinaryExpression(o, x, y, PINOCCHIO)
     },
 
     Exp5_shift(left, op, right) {
@@ -513,7 +513,7 @@ export default function analyze(sourceCode) {
       let type
       if (o === "#") mustHaveAnArrayType(x), (type = SHILLING)
       else if (o === "-") mustHaveNumericType(x), (type = x.type)
-      else if (o === "!") mustHaveBooleanType(x), (type = PINOCCIO)
+      else if (o === "!") mustHaveBooleanType(x), (type = PINOCCHIO)
       else if (o === "some") type = new core.OptionalType(x.type)
       return new core.UnaryExpression(o, x, type)
     },

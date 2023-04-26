@@ -41,7 +41,7 @@ export class TypeDeclaration {
 
 export class Type {
   // Type of all basic type int, float, string, etc. and superclass of others
-  static PINOCCIO = new Type("pinoccio")
+  static PINOCCHIO = new Type("pinocchio")
   static SHILLING = new Type("shilling")
   static SHILLINGF = new Type("shillingf")
   static SCRIPT = new Type("script")
@@ -282,4 +282,4 @@ export function error(message, node) {
 String.prototype.type = Type.SCRIPT
 Number.prototype.type = Type.SHILLINGF
 BigInt.prototype.type = Type.SHILLING
-Boolean.prototype.type = Type.PINOCCIO
+Boolean.prototype.type = Type.PINOCCHIO

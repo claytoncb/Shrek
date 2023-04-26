@@ -13,7 +13,7 @@ const stringToIntsType = new FunctionType([Type.SCRIPT], new ArrayType([Type.SHI
 export const contents = Object.freeze({
   shilling: Type.SHILLING,
   shillingf: Type.SHILLINGF,
-  pinoccio: Type.PINOCCIO,
+  pinocchio: Type.PINOCCHIO,
   script: Type.SCRIPT,
   void: Type.VOID,
   tao: new Variable("tao", true, Type.SHILLINGF),

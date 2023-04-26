@@ -8,12 +8,12 @@ const semanticChecks = [
   ["complex array types", "ogre f(x: [[[shilling?]]?]) {}"],
   ["increment and decrement", "enchanted x ~ 10; x--; x++;"],
   ["initialize with empty array", "enchanted a ~ (shilling)[];"],
-  ["type declaration", "struct S {f: (shilling)->pinoccio? g: script}"],
+  ["type declaration", "struct S {f: (shilling)->pinocchio? g: script}"],
   ["assign arrays", "enchanted a ~ (shilling)[];enchanted b~[1];a~b;b~a;"],
   ["assign to array element", "cursed a ~ [1,2,3]; a[1]~100;"],
   ["initialize with empty optional", "enchanted a ~ no shilling;"],
   ["short return", "ogre f() { return; }"],
-  ["long return", "ogre f(): pinoccio { return truth; }"],
+  ["long return", "ogre f(): pinocchio { return truth; }"],
   ["assign optionals val", "enchanted a ~ no shilling;enchanted b~some 1;a~b;b~a;"],
   ["assign optionals ref", "enchanted a <- no shilling;enchanted b<-some 1;a<-b;b<-a;"],
   ["return in nested whitevur", "ogre f() {whitevur truth {return;}}"],
@@ -52,15 +52,15 @@ const semanticChecks = [
   ["type equivalence of nested arrays", "ogre f(x: [[shilling]]) {} sing(f([[1],[2]]));"],
   [
     "call of assigned ogre in expression",
-    `ogre f(x: shilling, y: pinoccio): shilling {}
+    `ogre f(x: shilling, y: pinocchio): shilling {}
     enchanted g ~ f;
     sing(g(1, truth));
     f ~ g; // Type check here`,
   ],
   [
     "pass a ogre to a ogre",
-    `ogre f(x: shilling, y: (pinoccio)->void): shilling { return 1; }
-     ogre g(z: pinoccio) {}
+    `ogre f(x: shilling, y: (pinocchio)->void): shilling { return 1; }
+     ogre g(z: pinocchio) {}
      f(2, g);`,
   ],
   [
@@ -85,7 +85,7 @@ const semanticChecks = [
 
 // Programs that are syntactically correct but have semantic errors
 const semanticErrors = [
-  ["non-distinct fields", "struct S {x: pinoccio x: shilling}", /Fields must be distinct/],
+  ["non-distinct fields", "struct S {x: pinocchio x: shilling}", /Fields must be distinct/],
   ["non-shilling increment", "enchanted x~lie;x++;", /an integer/],
   ["non-shilling decrement", 'enchanted x~some[""];x++;', /an integer/],
   ["undeclared id", "sing(x);", /Identifier x not declared/],
@@ -93,8 +93,8 @@ const semanticErrors = [
   ["recursive struct", "struct S { x: shilling y: S }", /must not be recursive/],
   ["assign to cursed value", "cursed x ~ 1;x ~ 2;", /Cannot assign to cursed/],
   ["assign to cursed reference", "cursed x <- 1;x <- 2;", /Cannot assign to cursed/],
-  ["assign bad type", "enchanted x~1;x~truth;", /Cannot assign a pinoccio to a shilling/],
-  ["assign bad array type", "enchanted x~1;x~[truth];", /Cannot assign a \[pinoccio\] to a shilling/],
+  ["assign bad type", "enchanted x~1;x~truth;", /Cannot assign a pinocchio to a shilling/],
+  ["assign bad array type", "enchanted x~1;x~[truth];", /Cannot assign a \[pinocchio\] to a shilling/],
   ["assign bad optional type", "enchanted x~1;x~some 2;", /Cannot assign a shilling\? to a shilling/],
   ["theEnd outside loop", "theEnd;", /Break can only appear in a loop/],
   [
@@ -109,19 +109,19 @@ const semanticErrors = [
     /Cannot return a value/,
   ],
   ["return nothing from non-void", "ogre f(): shilling {return;}", /should be returned/],
-  ["return type mismatch", "ogre f(): shilling {return lie;}", /pinoccio to a shilling/],
-  ["non-pinoccio short whitevur test", "whitevur 1 {}", /Expected a pinoccio/],
-  ["non-pinoccio whitevur test", "whitevur 1 {} otherwise {}", /Expected a pinoccio/],
-  ["non-pinoccio while test", "while 1 {}", /Expected a pinoccio/],
+  ["return type mismatch", "ogre f(): shilling {return lie;}", /pinocchio to a shilling/],
+  ["non-pinocchio short whitevur test", "whitevur 1 {}", /Expected a pinocchio/],
+  ["non-pinocchio whitevur test", "whitevur 1 {} otherwise {}", /Expected a pinocchio/],
+  ["non-pinocchio while test", "while 1 {}", /Expected a pinocchio/],
   ["non-integer repeat", 'repeat "1" {}', /Expected an integer/],
   ["non-integer low range", "for i in truth...2 {}", /Expected an integer/],
   ["non-integer high range", "for i in 1..<no shilling {}", /Expected an integer/],
   ["non-array in for", "for i in 100 {}", /Expected an array/],
-  ["non-pinoccio conditional test", "sing(1?2:3);", /Expected a pinoccio/],
+  ["non-pinocchio conditional test", "sing(1?2:3);", /Expected a pinocchio/],
   ["diff types in conditional arms", "sing(truth?1:truth);", /not have the same type/],
   ["unwrap non-optional", "sing(1?:2);", /Expected an optional/],
-  ["bad types for ||", "sing(lie||1);", /Expected a pinoccio/],
-  ["bad types for &&", "sing(lie&&1);", /Expected a pinoccio/],
+  ["bad types for ||", "sing(lie||1);", /Expected a pinocchio/],
+  ["bad types for &&", "sing(lie&&1);", /Expected a pinocchio/],
   ["bad types for ==", "sing(lie==1);", /Operands do not have the same type/],
   ["bad types for !=", "sing(lie==1);", /Operands do not have the same type/],
   ["bad types for +", "sing(lie+1);", /Expected a number or script/],
@@ -137,7 +137,7 @@ const semanticErrors = [
   ["bad types for !=", "sing(lie!=1);", /not have the same type/],
   ["bad types for negation", "sing(-truth);", /Expected a number/],
   ["bad types for length", "sing(#lie);", /Expected an array/],
-  ["bad types for not", 'sing(!"hello");', /Expected a pinoccio/],
+  ["bad types for not", 'sing(!"hello");', /Expected a pinocchio/],
   ["non-integer index", "enchanted a~[1];sing(a[lie]);", /Expected an integer/],
   ["no such field", "struct S{} enchanted x~S(); sing(x.y);", /No such field/],
   ["diff type array elements", "sing([3,3.0]);", /Not all elements have the same type/],
@@ -157,14 +157,14 @@ const semanticErrors = [
   [
     "Parameter type mismatch",
     "ogre f(x: shilling) {}\nf(lie);",
-    /Cannot assign a pinoccio to a shilling/,
+    /Cannot assign a pinocchio to a shilling/,
   ],
   [
     "ogre type mismatch",
-    `ogre f(x: shilling, y: (pinoccio)->void): shilling { return 1; }
-     ogre g(z: pinoccio): shilling { return 5; }
+    `ogre f(x: shilling, y: (pinocchio)->void): shilling { return 1; }
+     ogre g(z: pinocchio): shilling { return 5; }
      f(2, g);`,
-    /Cannot assign a \(pinoccio\)->shilling to a \(pinoccio\)->void/,
+    /Cannot assign a \(pinocchio\)->shilling to a \(pinocchio\)->void/,
   ],
   ["bad param type in fn assign", "ogre f(x: shilling) {} ogre g(y: shillingf) {} f ~ g;"],
   [
@@ -172,7 +172,7 @@ const semanticErrors = [
     'ogre f(x: shilling): shilling {return 1;} ogre g(y: shilling): script {return "uh-oh";} f ~ g;',
     /Cannot assign a \(shilling\)->script to a \(shilling\)->shilling/,
   ],
-  ["bad call to stdlib sin()", "sing(sin(truth));", /Cannot assign a pinoccio to a shillingf/],
+  ["bad call to stdlib sin()", "sing(sin(truth));", /Cannot assign a pinocchio to a shillingf/],
   ["Non-type in param", "enchanted x~1;ogre f(y:x){}", /Type expected/],
   ["Non-type in return type", "enchanted x~1;ogre f():x{return 1;}", /Type expected/],
   ["Non-type in field type", "enchanted x~1;struct S {y:x}", /Type expected/],

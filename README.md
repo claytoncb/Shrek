@@ -42,7 +42,7 @@ Clayton Bruce, Sung Jae Ko, Dylan Lim
     Shrek:
     cursed Any-Shilling a ~ "3 bling mice";
 
-    cursed Shilling + Str + Pinoccio a ~ 4;
+    cursed Shilling + Str + Pinocchio a ~ 4;
     
 </div>
 
@@ -52,7 +52,7 @@ Clayton Bruce, Sung Jae Ko, Dylan Lim
     enchanted = public
     cursed = private
     Donkey = String
-    Pinoccio = boolean
+    Pinocchio = boolean
     truth = true
     lie = false
     Ogre = Class
