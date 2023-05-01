@@ -69,14 +69,6 @@ function mustBeTheSameType(e1, e2, at) {
   must(equivalent(e1.type, e2.type), "Operands do not have the same type", at)
 }
 
-function mustAllHaveSameType(expressions, at) {
-  // Used to check array elements, for example
-  must(
-    expressions.slice(1).every(e => equivalent(e.type, expressions[0].type)),
-    "Not all elements have the same type",
-    at
-  )
-}
 
 function mustNotBeRecursive(struct, at) {
   must(
@@ -86,7 +78,7 @@ function mustNotBeRecursive(struct, at) {
   )
 }
 
-function equivalent(t1, t2) {
+export function equivalent(t1, t2) {
   return (
     t1 === t2 ||
     (t1 instanceof core.OptionalType &&
@@ -99,7 +91,11 @@ function equivalent(t1, t2) {
       t2.constructor === core.FunctionType &&
       equivalent(t1.returnType, t2.returnType) &&
       t1.paramTypes.length === t2.paramTypes.length &&
-      t1.paramTypes.every((t, i) => equivalent(t, t2.paramTypes[i])))
+      t1.paramTypes.every((t, i) => equivalent(t, t2.paramTypes[i])))||
+      (t1.constructor === core.SumType &&
+        t2.constructor === core.SumType &&
+        t1.types.length === t2.types.length &&
+        t1.types.every((t, i) => equivalent(t, t2.types[i])))
   )
 }
 
@@ -113,7 +109,16 @@ function assignable(fromType, toType) {
       assignable(fromType.returnType, toType.returnType) &&
       fromType.paramTypes.length === toType.paramTypes.length &&
       // contravariant in parameter types
-      toType.paramTypes.every((t, i) => assignable(t, fromType.paramTypes[i])))
+      toType.paramTypes.every((t, i) => assignable(t, fromType.paramTypes[i]))) ||
+      (fromType.constructor === core.SumType &&
+        toType.constructor === core.SumType &&
+        fromType.types.length <= toType.types.length &&
+        fromType.types.every(tFrom => toType.some(tTo=>assignable(tFrom, tTo)))) ||
+        (toType.constructor === core.SumType &&
+          toType.types.some(t=>assignable(fromType,t))) ||
+          (fromType instanceof core.ArrayType &&
+            toType instanceof core.ArrayType &&
+            assignable(fromType.baseType, toType.baseType))
   )
 }
 
@@ -272,6 +277,11 @@ export default function analyze(sourceCode) {
 
     Type_function(_left, inTypes, _right, _arrow, outType) {
       return new core.FunctionType(inTypes.asIteration().rep(), outType.rep())
+    },
+
+    Type_sum(_left, types, _right) {
+      let t = types.asIteration().rep()
+      return t.length>1?new core.SumType(t):new core.TypeDeclaration(t[0])
     },
 
     Type_id(id) {
@@ -524,7 +534,6 @@ export default function analyze(sourceCode) {
 
     Exp9_arrayexp(_left, args, _right) {
       const elements = args.asIteration().rep()
-      mustAllHaveSameType(elements)
       return new core.ArrayExpression(elements)
     },
 

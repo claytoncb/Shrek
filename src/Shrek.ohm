@@ -24,7 +24,7 @@ Shrek {
   Type        = Type "?"                                      --optional
               | "[" Type "]"                                  --array
               | "(" ListOf<Type, ","> ")" "->" Type           --function
-              | "[" ListOf<Type, ","> "]"                     --sum
+              | "<" ListOf<Type, ","> ">"                     --sum
               | id                                            --id
 
   WhitevurStmt      = whitevur Exp Block otherwise Block                       --long

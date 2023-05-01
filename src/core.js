@@ -1,5 +1,6 @@
 import util from "util"
 import stringify from "graph-stringify"
+import { equivalent } from "./analyzer.js"
 
 export class Program {
   // Example: let x = 1; print(x * 5); print("done");
@@ -96,6 +97,20 @@ export class FunctionType extends Type {
   constructor(paramTypes, returnType) {
     super(`(${paramTypes.map(t => t.description).join(",")})->${returnType.description}`)
     Object.assign(this, { paramTypes, returnType })
+  }
+}
+
+export class SumType extends Type {
+  // Example: (boolean,[string]?)->float
+  constructor(inTypes) {
+    let types = []
+    inTypes.forEach(type=>{
+      if (!types.some(pushedType=>equivalent(type,pushedType))) {
+        types.push(type)
+      }
+    })
+    super(`<${types.map(t => t.description).join(",")}>`)
+    Object.assign(this, { types })
   }
 }
 
@@ -234,7 +249,11 @@ export class ArrayExpression {
   // Example: ["Emma", "Norman", "Ray"]
   constructor(elements) {
     this.elements = elements
-    this.type = new ArrayType(elements[0].type)
+    if (elements.every(e=>equivalent(e.type,elements[0].type))) {
+      this.type = new ArrayType(elements[0].type)
+    } else {
+      this.type = new ArrayType(new SumType(elements.map(e=>e.type)))
+    }
   }
 }
 
