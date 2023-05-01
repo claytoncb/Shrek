@@ -13,6 +13,9 @@ const semanticChecks = [
   ["type declaration", "struct S {f: (shilling)->pinocchio? g: script}"],
   ["assign arrays", "enchanted a ~ (shilling)[];enchanted b~[1];a~b;b~a;"],
   ["assign sumtype arrays", "enchanted a ~ (<shilling,pinocchio>)[];enchanted b~[1,lie];a~b;b~a;"],
+  ["assign sumtype arrays to sumtype arrays", "enchanted a ~ (<shilling,pinocchio>)[];enchanted b~[1,lie,1.0];b~a;"],
+  ["assign sumtype arrays to sumtype arrays", "enchanted a ~ (<pinocchio,shilling>)[];enchanted b ~ (<shilling,pinocchio>)[];b~a;a~b;a<-b;"],
+  ["assign sumtypes with one type", "enchanted a ~ (<pinocchio>)[];enchanted b ~ (pinocchio)[];b~a;a~b;a<-b;"],
   ["assign to array element", "cursed a ~ [1,2,3]; a[1]~100;"],
   ["initialize with empty optional", "enchanted a ~ no shilling;"],
   ["short return", "ogre f() { return; }"],
@@ -99,6 +102,7 @@ const semanticErrors = [
   ["assign bad type", "enchanted x~1;x~truth;", /Cannot assign a pinocchio to a shilling/],
   ["assign bad array type", "enchanted x~1;x~[truth];", /Cannot assign a \[pinocchio\] to a shilling/],
   ["assign bad array type", "enchanted x~(<shilling,shillingf>)[];x~[truth];", /Cannot assign a \[pinocchio\] to a \[<shilling,shillingf>\]/],
+  ["assign sumtype arrays to sumtype arrays", "enchanted a ~ (<shilling,pinocchio>)[];enchanted b~[1,lie,1.0];a~b;",/Cannot assign a \[<shilling,pinocchio,shillingf>\] to a \[<shilling,pinocchio>\]/],
   ["assign bad optional type", "enchanted x~1;x~some 2;", /Cannot assign a shilling\? to a shilling/],
   ["theEnd outside loop", "theEnd;", /Break can only appear in a loop/],
   [

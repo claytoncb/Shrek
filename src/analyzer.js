@@ -113,7 +113,7 @@ function assignable(fromType, toType) {
       (fromType.constructor === core.SumType &&
         toType.constructor === core.SumType &&
         fromType.types.length <= toType.types.length &&
-        fromType.types.every(tFrom => toType.some(tTo=>assignable(tFrom, tTo)))) ||
+        fromType.types.every(tFrom => toType.types.some(tTo=>assignable(tFrom, tTo)))) ||
         (toType.constructor === core.SumType &&
           toType.types.some(t=>assignable(fromType,t))) ||
           (fromType instanceof core.ArrayType &&
@@ -281,7 +281,7 @@ export default function analyze(sourceCode) {
 
     Type_sum(_left, types, _right) {
       let t = types.asIteration().rep()
-      return t.length>1?new core.SumType(t):new core.TypeDeclaration(t[0])
+      return t.length>1?new core.SumType(t):t[0]
     },
 
     Type_id(id) {
