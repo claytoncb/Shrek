@@ -280,8 +280,8 @@ export default function analyze(sourceCode) {
     },
 
     Type_sum(_left, types, _right) {
-      let t = types.asIteration().rep()
-      return t.length>1?new core.SumType(t):t[0]
+      types = types.asIteration().rep()
+      return types.length>1?new core.SumType(types):types[0]
     },
 
     Type_id(id) {
