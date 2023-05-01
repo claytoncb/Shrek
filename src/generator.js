@@ -3,14 +3,14 @@
 // Invoke generate(program) with the program node to get back the JavaScript
 // translation as a string.
 
-import { IfStatement, Type } from "./core.js"
+import { WhitevurStatement, Type } from "./core.js"
 import * as stdlib from "./stdlib.js"
 
 export default function generate(program) {
   const output = []
 
   const standardFunctions = new Map([
-    [stdlib.contents.print, x => `console.log(${x})`],
+    [stdlib.contents.sing, x => `console.log(${x})`],
     [stdlib.contents.sin, x => `Math.sin(${x})`],
     [stdlib.contents.cos, x => `Math.cos(${x})`],
     [stdlib.contents.exp, x => `Math.exp(${x})`],
@@ -105,10 +105,10 @@ export default function generate(program) {
     ShortReturnStatement(s) {
       output.push("return;")
     },
-    IfStatement(s) {
+    WhitevurStatement(s) {
       output.push(`if (${gen(s.test)}) {`)
       gen(s.consequent)
-      if (s.alternate.constructor === IfStatement) {
+      if (s.alternate.constructor === WhitevurStatement) {
         output.push("} else")
         gen(s.alternate)
       } else {
@@ -117,7 +117,7 @@ export default function generate(program) {
         output.push("}")
       }
     },
-    ShortIfStatement(s) {
+    ShortWhitevurStatement(s) {
       output.push(`if (${gen(s.test)}) {`)
       gen(s.consequent)
       output.push("}")

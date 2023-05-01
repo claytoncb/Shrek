@@ -346,7 +346,7 @@ export default function analyze(sourceCode) {
       context = context.newChildContext()
       const alternateRep = alternate.rep()
       context = context.parent
-      return new core.IfStatement(testRep, consequentRep, alternateRep)
+      return new core.WhitevurStatement(testRep, consequentRep, alternateRep)
     },
 
     WhitevurStmt_elsif(_if, test, consequent, _else, alternate) {
@@ -356,7 +356,7 @@ export default function analyze(sourceCode) {
       const consequentRep = consequent.rep()
       // Do NOT make a new context for the alternate!
       const alternateRep = alternate.rep()
-      return new core.IfStatement(testRep, consequentRep, alternateRep)
+      return new core.WhitevurStatement(testRep, consequentRep, alternateRep)
     },
 
     WhitevurStmt_short(_if, test, consequent) {
@@ -365,7 +365,7 @@ export default function analyze(sourceCode) {
       context = context.newChildContext()
       const consequentRep = consequent.rep()
       context = context.parent
-      return new core.ShortIfStatement(testRep, consequentRep)
+      return new core.ShortWhitevurStatement(testRep, consequentRep)
     },
 
     LoopStmt_while(_while, test, body) {

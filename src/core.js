@@ -165,14 +165,14 @@ export class ShortReturnStatement {
   // Intentionally empty
 }
 
-export class IfStatement {
+export class WhitevurStatement {
   // Example: if x < 3 { print(100); } else { break; }
   constructor(test, consequent, alternate) {
     Object.assign(this, { test, consequent, alternate })
   }
 }
 
-export class ShortIfStatement {
+export class ShortWhitevurStatement {
   // Example: if x < 3 { print(100); }
   constructor(test, consequent) {
     Object.assign(this, { test, consequent })

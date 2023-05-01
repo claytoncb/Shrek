@@ -3,13 +3,13 @@ import parse from "../src/parser.js"
 
 // Programs expected to be syntactically correct
 const syntaxChecks = [
-  ["simplest syntactically correct program", "break;"],
+  ["simplest syntactically correct program", "theEnd;"],
   //TODO::
 ]
 
 // Programs with syntax errors that the parser will detect
 const syntaxErrors = [
-  ["non-letter in an identifier", "let ab😭c = 2;", /Line 1, col 7:/],
+  ["non-letter in an identifier", "enchanted ab😭c ~ 2;", /Line 1, col 13:/],
   //TODO::
 ]
 
