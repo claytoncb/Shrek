@@ -33,7 +33,7 @@ function mustHaveNumericOrStringType(e, at) {
   must([SHILLING, SHILLINGF, SCRIPT].includes(e.type), "Expected a number or script", at)
 }
 
-function mustHaveBooleanType(e, at) {
+function mustHavePinocchioType(e, at) {
   must(e.type === PINOCCHIO, "Expected a pinocchio", at)
 }
 
@@ -144,7 +144,7 @@ function memberMustBeDeclared(field, { in: structType }, at) {
 }
 
 function mustBeInLoop(context, at) {
-  must(context.inLoop, "Break can only appear in a loop", at)
+  must(context.inLoop, "theEnd can only appear in a loop", at)
 }
 
 function mustBeInAFunction(context, at) {
@@ -318,9 +318,9 @@ export default function analyze(sourceCode) {
       return call.rep()
     },
 
-    Statement_break(_break, _semicolon) {
+    Statement_the_end(_theEnd, _semicolon) {
       mustBeInLoop(context)
-      return new core.BreakStatement()
+      return new core.TheEndStatement()
     },
 
     Statement_return(returnKeyword, expression, _semicolon) {
@@ -339,7 +339,7 @@ export default function analyze(sourceCode) {
 
     WhitevurStmt_long(_if, test, consequent, _else, alternate) {
       const testRep = test.rep()
-      mustHaveBooleanType(testRep)
+      mustHavePinocchioType(testRep)
       context = context.newChildContext()
       const consequentRep = consequent.rep()
       context = context.parent
@@ -351,7 +351,7 @@ export default function analyze(sourceCode) {
 
     WhitevurStmt_elsif(_if, test, consequent, _else, alternate) {
       const testRep = test.rep()
-      mustHaveBooleanType(testRep)
+      mustHavePinocchioType(testRep)
       context = context.newChildContext()
       const consequentRep = consequent.rep()
       // Do NOT make a new context for the alternate!
@@ -361,7 +361,7 @@ export default function analyze(sourceCode) {
 
     WhitevurStmt_short(_if, test, consequent) {
       const testRep = test.rep()
-      mustHaveBooleanType(testRep, test)
+      mustHavePinocchioType(testRep, test)
       context = context.newChildContext()
       const consequentRep = consequent.rep()
       context = context.parent
@@ -370,7 +370,7 @@ export default function analyze(sourceCode) {
 
     LoopStmt_while(_while, test, body) {
       const t = test.rep()
-      mustHaveBooleanType(t)
+      mustHavePinocchioType(t)
       context = context.newChildContext({ inLoop: true })
       const b = body.rep()
       context = context.parent
@@ -416,7 +416,7 @@ export default function analyze(sourceCode) {
 
     Exp_conditional(test, _questionMark, consequent, _colon, alternate) {
       const x = test.rep()
-      mustHaveBooleanType(x)
+      mustHavePinocchioType(x)
       const [y, z] = [consequent.rep(), alternate.rep()]
       mustBeTheSameType(y, z)
       return new core.Conditional(x, y, z)
@@ -431,9 +431,9 @@ export default function analyze(sourceCode) {
 
     Exp2_or(left, ops, right) {
       let [x, o, ys] = [left.rep(), ops.rep()[0], right.rep()]
-      mustHaveBooleanType(x)
+      mustHavePinocchioType(x)
       for (let y of ys) {
-        mustHaveBooleanType(y)
+        mustHavePinocchioType(y)
         x = new core.BinaryExpression(o, x, y, PINOCCHIO)
       }
       return x
@@ -441,9 +441,9 @@ export default function analyze(sourceCode) {
 
     Exp2_and(left, ops, right) {
       let [x, o, ys] = [left.rep(), ops.rep()[0], right.rep()]
-      mustHaveBooleanType(x)
+      mustHavePinocchioType(x)
       for (let y of ys) {
-        mustHaveBooleanType(y)
+        mustHavePinocchioType(y)
         x = new core.BinaryExpression(o, x, y, PINOCCHIO)
       }
       return x
@@ -523,7 +523,7 @@ export default function analyze(sourceCode) {
       let type
       if (o === "#") mustHaveAnArrayType(x), (type = SHILLING)
       else if (o === "-") mustHaveNumericType(x), (type = x.type)
-      else if (o === "!") mustHaveBooleanType(x), (type = PINOCCHIO)
+      else if (o === "!") mustHavePinocchioType(x), (type = PINOCCHIO)
       else if (o === "some") type = new core.OptionalType(x.type)
       return new core.UnaryExpression(o, x, type)
     },

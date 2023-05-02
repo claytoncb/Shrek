@@ -8,7 +8,7 @@ Shrek {
               | Exp9 "~" Exp ";"                              --assign_val
               | Exp9 "<-" Exp ";"                              --assign_ref
               | Exp9_call ";"                                 --call
-              | theEnd ";"                                     --break
+              | theEnd ";"                                     --the_end
               | return Exp ";"                                --return
               | return ";"                                    --shortreturn
               | WhitevurStmt

@@ -104,11 +104,11 @@ const semanticErrors = [
   ["assign bad array type", "enchanted x~(<shilling,shillingf>)[];x~[truth];", /Cannot assign a \[pinocchio\] to a \[<shilling,shillingf>\]/],
   ["assign sumtype arrays to sumtype arrays", "enchanted a ~ (<shilling,pinocchio>)[];enchanted b~[1,lie,1.0];a~b;",/Cannot assign a \[<shilling,pinocchio,shillingf>\] to a \[<shilling,pinocchio>\]/],
   ["assign bad optional type", "enchanted x~1;x~some 2;", /Cannot assign a shilling\? to a shilling/],
-  ["theEnd outside loop", "theEnd;", /Break can only appear in a loop/],
+  ["theEnd outside loop", "theEnd;", /theEnd can only appear in a loop/],
   [
     "theEnd inside ogre",
     "while truth {ogre f() {theEnd;}}",
-    /Break can only appear in a loop/,
+    /theEnd can only appear in a loop/,
   ],
   ["return outside ogre", "return;", /Return can only appear in a ogre/],
   [

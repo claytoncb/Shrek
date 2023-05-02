@@ -76,8 +76,8 @@ export default function generate(program) {
     },
     Variable(v) {
       // Standard library constants just get special treatment
-      if (v === stdlib.contents.π) {
-        return "Math.PI"
+      if (v === stdlib.contents.tao) {
+        return "(Math.PI*2)"
       }
       return targetName(v)
     },
@@ -96,7 +96,7 @@ export default function generate(program) {
     AssignmentRef(s) {
       output.push(`${gen(s.target)} = ${gen(s.source)};`)
     },
-    BreakStatement(s) {
+    TheEndStatement(s) {
       output.push("break;")
     },
     ReturnStatement(s) {
@@ -196,7 +196,7 @@ export default function generate(program) {
     BigInt(e) {
       return e
     },
-    Boolean(e) {
+    Pinocchio(e) {
       return e
     },
     String(e) {

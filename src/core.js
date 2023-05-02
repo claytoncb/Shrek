@@ -93,7 +93,7 @@ export class ArrayType extends Type {
 }
 
 export class FunctionType extends Type {
-  // Example: (boolean,[string]?)->float
+  // Example: (pinocchio,[string]?)->float
   constructor(paramTypes, returnType) {
     super(`(${paramTypes.map(t => t.description).join(",")})->${returnType.description}`)
     Object.assign(this, { paramTypes, returnType })
@@ -101,7 +101,7 @@ export class FunctionType extends Type {
 }
 
 export class SumType extends Type {
-  // Example: (boolean,[string]?)->float
+  // Example: (pinocchio,[string]?)->float
   constructor(inTypes) {
     let types = []
     inTypes.forEach(type=>{
@@ -150,7 +150,7 @@ export class AssignmentRef {
   }
 }
 
-export class BreakStatement {
+export class TheEndStatement {
   // Intentionally empty
 }
 
@@ -295,7 +295,7 @@ export function error(message, node) {
 }
 
 // We want every expression to have a type property. But we aren't creating
-// special entities for numbers, strings, and booleans; instead, we are
+// special entities for numbers, strings, and pinocchios; instead, we are
 // just using JavaScript values for those. Fortunately we can monkeypatch
 // the JS classes for these to give us what we want.
 String.prototype.type = Type.SCRIPT
