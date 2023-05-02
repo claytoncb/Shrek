@@ -27,7 +27,8 @@ Shrek {
               | "<" ListOf<Type, ","> ">"                     --sum
               | id                                            --id
 
-  WhitevurStmt      = whitevur Exp Block otherwise Block                       --long
+  WhitevurStmt      
+              = whitevur Exp Block otherwise Block                       --long
               | whitevur Exp Block otherwise WhitevurStmt                      --elsif
               | whitevur Exp Block                                  --short
   LoopStmt    = while Exp Block                               --while
@@ -80,7 +81,8 @@ Shrek {
               | "\\u{" hex hex? hex? hex? hex? hex? "}"       --codepoint
   control     = "\x00".."\x1f" | "\x80".."\x9f"
   hex         = hexDigit
-  mut         = ~"==" "=" | "++" | "--"
+  mut (an assignment operator)
+              = "~" | "<-"
 
   enchanted         = "enchanted" ~alnum
   cursed       = "cursed" ~alnum

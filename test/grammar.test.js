@@ -1,6 +1,7 @@
-import assert from "assert/strict"
-import fs from "fs"
-import ohm from "ohm-js"
+import assert from "assert/strict";
+import fs from "fs";
+import ohm from "ohm-js";
+import parse from "../src/parser.js";
 
 // Programs expected to be syntactically correct
 const syntaxChecks = [
@@ -24,7 +25,10 @@ const syntaxChecks = [
   ["call in exp", "sing(5 * f(x, y, 2 * y));"],
   ["short whitevur", "whitevur truth { sing(1); }"],
   ["longer whitevur", "whitevur truth { sing(1); } otherwise { sing(1); }"],
-  ["even longer whitevur", "whitevur truth { sing(1); } otherwise whitevur lie { sing(1);}"],
+  [
+    "even longer whitevur",
+    "whitevur truth { sing(1); } otherwise whitevur lie { sing(1);}",
+  ],
   ["while with empty block", "while truth {}"],
   ["while with one statement block", "while truth { enchanted x~1; }"],
   ["repeat with long block", "repeat 2 { sing(1);\nsing(2);sing(3); }"],
@@ -59,13 +63,17 @@ const syntaxChecks = [
   ["u-escape", 'sing("\\u{a}\\u{2c}\\u{1e5}\\u{ae89}\\u{1f4a9}\\u{10ffe8}");'],
   ["end of program inside comment", "sing(0); // yay"],
   ["comments with no text", "sing(1);//\nsing(0);//"],
-]
+];
 
 // Programs with syntax errors that the parser will detect
 const syntaxErrors = [
   ["non-letter in an identifier", "enchanted ab😭c ~ 2;", /Line 1, col 13:/],
   ["malformed number", "enchanted x ~ 2.;", /Line 1, col 17:/],
-  ["a float with an E but no exponent", "enchanted x ~ 5E * 11;", /Line 1, col 16:/],
+  [
+    "a float with an E but no exponent",
+    "enchanted x ~ 5E * 11;",
+    /Line 1, col 16:/,
+  ],
   ["a missing right operand", "sing(5 -);", /Line 1, col 9:/],
   ["a non-operator", "sing(7 * ((2 _ 3));", /Line 1, col 14:/],
   ["an expression starting with a )", "return );", /Line 1, col 8:/],
@@ -79,37 +87,34 @@ const syntaxErrors = [
   ["associating relational operators", "sing(1 < 2 < 3);", /Line 1, col 12:/],
   ["while without braces", "while truth\nsing(1);", /Line 2, col 1/],
   ["whitevur without braces", "whitevur x < 3\nsing(1);", /Line 2, col 1/],
-  ["while as identifier", "enchanted for = 3;", /Line 1, col 5/],
-  ["whitevur as identifier", "enchanted whitevur = 8;", /Line 1, col 5/],
-  ["unbalanced brackets", "ogre f(): shilling[;", /Line 1, col 18/],
-  ["empty array without type", "sing([]);", /Line 1, col 9/],
-  ["bad array literal", "sing([1,2,]);", /Line 1, col 12/],
-  ["empty subscript", "sing(a[]);", /Line 1, col 9/],
-  ["truth is not assignable", "truth ~ 1;", /Line 1, col 7/],
-  ["lie is not assignable val", "lie ~ 1;", /Line 1, col 6/],
-  ["lie is not assignable ref", "lie <- 1;", /Line 1, col 6/],
+  ["while as identifier", "enchanted while ~ 3;", /Line 1, col 11/],
+  ["whitevur as identifier", "enchanted whitevur ~ 8;", /Line 1, col 11/],
+  ["unbalanced brackets", "ogre f(): shilling[;", /Line 1, col 19/],
+  ["empty array without type", "sing([]);", /Line 1, col 7/],
+  ["bad array literal", "sing([1,2,]);", /Line 1, col 11/],
+  ["empty subscript", "sing(a[]);", /Line 1, col 8/],
+  ["truth is not assignable", "truth ~ 1;", /Line 1, col 6/],
+  ["lie is not assignable val", "lie ~ 1;", /Line 1, col 4/],
+  ["lie is not assignable ref", "lie <- 1;", /Line 1, col 4/],
   ["numbers cannot be subscripted", "sing(500[x]);", /Line 1, col 9/],
   ["numbers cannot be called", "sing(500(x));", /Line 1, col 9/],
   ["numbers cannot be dereferenced", "sing(500 .x);", /Line 1, col 10/],
-  ["no-paren ogre type", "ogre f(g:shilling->shilling) {}", /Line 1, col 17/],
+  ["no-paren ogre type", "ogre f(g:shilling->shilling) {}", /Line 1, col 18/],
   ["string lit with unknown escape", 'sing("ab\\zcdef");', /col 10/],
   ["string lit with newline", 'sing("ab\\zcdef");', /col 10/],
   ["string lit with quote", 'sing("ab\\zcdef");', /col 10/],
   ["string lit with code point too long", 'sing("\\u{1111111}");', /col 16/],
-]
+];
 
 describe("The grammar", () => {
-  const grammar = ohm.grammar(fs.readFileSync("src/Shrek.ohm"))
   for (const [scenario, source] of syntaxChecks) {
     it(`properly specifies ${scenario}`, () => {
-      assert(grammar.match(source).succeeded())
-    })
+      assert(parse(source).succeeded());
+    });
   }
   for (const [scenario, source, errorMessagePattern] of syntaxErrors) {
     it(`does not permit ${scenario}`, () => {
-      const match = grammar.match(source)
-      assert(!match.succeeded())
-      assert(new RegExp(errorMessagePattern).test(match.message))
-    })
+      assert.throws(() => parse(source), errorMessagePattern);
+    });
   }
-})
+});
