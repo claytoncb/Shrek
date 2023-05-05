@@ -3,6 +3,7 @@ import parse from "../src/parser.js"
 import analyze from "../src/analyzer.js"
 import optimize from "../src/optimizer.js"
 import generate from "../src/generator.js"
+import compile from "../src/compiler.js"
 
 function dedent(s) {
   return `${s}`.replace(/(?<=\n)\s+/g, "").trim()
@@ -182,7 +183,7 @@ const fixtures = [
 describe("The code generator", () => {
   for (const fixture of fixtures) {
     it(`produces expected js output for the ${fixture.name} program`, () => {
-      const actual = generate(optimize(analyze(parse(fixture.source))))
+      const actual = compile(fixture.source,'js')
       assert.deepEqual(actual, fixture.expected)
     })
   }

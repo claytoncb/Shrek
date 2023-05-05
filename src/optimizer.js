@@ -24,7 +24,6 @@
 import * as core from "./core.js";
 
 export default function optimize(node) {
-  // console.log(node.constructor);
   return optimizers[node.constructor.name](node);
 }
 
