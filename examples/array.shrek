@@ -1,1 +1,4 @@
-sing([0,1+2,9]);
+enchanted a ~ [truth, lie, truth];
+enchanted b ~ [10, #a - 20, 30];
+enchanted c ~ [[shilling]]();
+sing(a[1] || (b[0] < 88 ? lie : truth));

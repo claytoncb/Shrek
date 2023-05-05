@@ -80,15 +80,15 @@ const fixtures = [
        }
     `,
     expected: dedent`
-      let x_1 ~ 0;
+      let x_1 = 0;
       while ((x_1 < 5)) {
-        let y_2 ~ 0;
+        let y_2 = 0;
         while ((y_2 < 5)) {
           console.log((x_1 * y_2));
-          y_2 ~ (y_2 + 1);
+          y_2 = (y_2 + 1);
           break;
         }
-        x_1 ~ (x_1 + 1);
+        x_1 = (x_1 + 1);
       }
     `,
   },

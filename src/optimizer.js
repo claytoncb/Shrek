@@ -88,7 +88,7 @@ const optimizers = {
     }
     return s;
   },
-  BreakStatement(s) {
+  TheEndStatement(s) {
     return s;
   },
   ReturnStatement(s) {
