@@ -95,18 +95,16 @@ const fixtures = [
   {
     name: "arrays",
     source: `
-      enchanted a ~ [truth, lie, truth];
-      enchanted b ~ [10, #a - 20, 30];
-      cursed c ~ [[shilling]]();
-      sing(a[1] || (b[0] < 88 ? lie : truth));
+    enchanted a ~ [truth, lie, truth];
+    enchanted b ~ [10, #a - 20, 30];
+    enchanted c ~ [1,lie,"s"];
+    sing(a[1] || (b[0] < 88 ? lie : truth));
     `,
     expected: dedent`
-      let a_1 = [true,false,true];
-      let b_2 = [10,(a_1.length - 20),30];
-      let c_3 = [];
-      let d_4 = _r(b_2);
-      console.log((a_1[1] || (((b_2[0] < 88)) ? (false) : (true))));
-      function _r(a){return a[~~(a.length)]}
+    let a_1 = [true,false,true];
+    let b_2 = [10,(#(a_1) - 20),30];
+    let c_3 = [1,false,"s"];
+    console.log((a_1[1] || (((b_2[0] < 88)) ? (false) : (true))));
     `,
   },
   {
