@@ -1,6 +1,8 @@
-enchanted ogre fiona {
-    shilling a ~ 1
+struct OgrePerson {
+    a: <shilling,shillingf>
+    b: shilling
 }
 
-fiona.a ~ 2
+enchanted fiona ~ OgrePerson(2, 5);
 
+sing(fiona.a);
