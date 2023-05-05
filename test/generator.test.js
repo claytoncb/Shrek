@@ -103,7 +103,7 @@ const fixtures = [
     expected: dedent`
     let a_1 = [true,false,true];
     let b_2 = [10,(#(a_1) - 20),30];
-    let c_3 = [1,false,"s"];
+    let c_3 = {0: 1,1: false,2: "s"};
     console.log((a_1[1] || (((b_2[0] < 88)) ? (false) : (true))));
     `,
   },

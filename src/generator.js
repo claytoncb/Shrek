@@ -3,7 +3,7 @@
 // Invoke generate(program) with the program node to get back the JavaScript
 // translation as a string.
 
-import { WhitevurStatement, Type } from "./core.js"
+import { WhitevurStatement, Type, SumType } from "./core.js"
 import * as stdlib from "./stdlib.js"
 
 export default function generate(program) {
@@ -166,6 +166,8 @@ export default function generate(program) {
       return `${gen(e.array)}[${gen(e.index)}]`
     },
     ArrayExpression(e) {
+      console.log(e)
+      if (e?.type?.baseType instanceof SumType) return `{${gen(e.elements).map((e,i)=>{return `${i}: ${e}`}).join(",")}}`
       return `[${gen(e.elements).join(",")}]`
     },
     EmptyArray(e) {
