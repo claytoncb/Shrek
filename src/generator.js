@@ -9,7 +9,7 @@ import * as stdlib from "./stdlib.js"
 export default function generate(program) {
   const output = []
 
-  const standardFunctions = new Map([
+  const standardOgres = new Map([
     [stdlib.contents.sing, x => `console.log(${x})`],
     [stdlib.contents.sin, x => `Math.sin(${x})`],
     [stdlib.contents.cos, x => `Math.cos(${x})`],
@@ -34,6 +34,7 @@ export default function generate(program) {
   })(new Map())
 
   function gen(node) {
+    console.log(node.constructor.name)
     return generators[node.constructor.name](node)
   }
 
@@ -69,7 +70,7 @@ export default function generate(program) {
     Field(f) {
       return targetName(f)
     },
-    FunctionDeclaration(d) {
+    OgreDeclaration(d) {
       output.push(`function ${gen(d.fun)}(${gen(d.params).join(", ")}) {`)
       gen(d.body)
       output.push("}")
@@ -81,7 +82,7 @@ export default function generate(program) {
       }
       return targetName(v)
     },
-    Function(f) {
+    Ogre(f) {
       return targetName(f)
     },
     Increment(s) {
@@ -177,9 +178,9 @@ export default function generate(program) {
       const chain = e.isOptional ? "?." : ""
       return `(${object}${chain}[${field}])`
     },
-    FunctionCall(c) {
-      const targetCode = standardFunctions.has(c.callee)
-        ? standardFunctions.get(c.callee)(gen(c.args))
+    OgreCall(c) {
+      const targetCode = standardOgres.has(c.callee)
+        ? standardOgres.get(c.callee)(gen(c.args))
         : `${gen(c.callee)}(${gen(c.args).join(", ")})`
       // Calls in expressions vs in statements are handled differently
       if (c.callee.type.returnType !== Type.VOID) {
@@ -196,7 +197,7 @@ export default function generate(program) {
     BigInt(e) {
       return e
     },
-    Pinocchio(e) {
+    Boolean(e) {
       return e
     },
     String(e) {
@@ -206,7 +207,6 @@ export default function generate(program) {
       return a.map(gen)
     },
   }
-
   gen(program)
   return output.join("\n")
 }

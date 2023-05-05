@@ -1,0 +1,10 @@
+enchanted x ~ 0;
+while x < 5 {
+    enchanted y ~ 0;
+    while y < 5 {
+        sing(x * y);
+        y ~ y + 1;
+        theEnd;
+    }
+    x ~ x + 1;
+}

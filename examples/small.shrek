@@ -1,0 +1,6 @@
+enchanted x ~ 3 * 7;
+x++;
+x--;
+enchanted y ~ truth;
+y ~ 5 ** -x / -100 > - x || lie;
+sing((y && y) || lie || (x*2) != 5);

@@ -54,7 +54,7 @@ const optimizers = {
     f.name = f.name.lexeme;
     return f;
   },
-  FunctionDeclaration(d) {
+  OgreDeclaration(d) {
     d.fun = optimize(d.fun);
     if (d.body) d.body = optimize(d.body);
     return d;
@@ -62,7 +62,7 @@ const optimizers = {
   Variable(v) {
     return v;
   },
-  Function(f) {
+  Ogre(f) {
     return f;
   },
   Increment(s) {
@@ -99,7 +99,7 @@ const optimizers = {
   ShortReturnStatement(s) {
     return s;
   },
-  IfStatement(s) {
+  WhitevurStatement(s) {
     s.test = optimize(s.test);
     s.consequent = optimize(s.consequent);
     s.alternate = optimize(s.alternate);
@@ -108,7 +108,7 @@ const optimizers = {
     }
     return s;
   },
-  ShortIfStatement(s) {
+  ShortWhitevurStatement(s) {
     s.test = optimize(s.test);
     s.consequent = optimize(s.consequent);
     if (s.test.constructor === Boolean) {
@@ -241,7 +241,7 @@ const optimizers = {
     e.object = optimize(e.object);
     return e;
   },
-  FunctionCall(c) {
+  OgreCall(c) {
     c.callee = optimize(c.callee);
     c.args = optimize(c.args);
     return c;

@@ -70,14 +70,14 @@ export class Field {
   }
 }
 
-export class FunctionDeclaration {
+export class OgreDeclaration {
   // Example: function f(x: [int?], y: string): Vector {}
   constructor(name, fun, params, body) {
     Object.assign(this, { name, fun, params, body });
   }
 }
 
-export class Function {
+export class Ogre {
   // Generated when processing a function declaration
   constructor(name, type) {
     Object.assign(this, { name, type });
@@ -92,7 +92,7 @@ export class ArrayType extends Type {
   }
 }
 
-export class FunctionType extends Type {
+export class OgreType extends Type {
   // Example: (pinocchio,[string]?)->float
   constructor(paramTypes, returnType) {
     super(
@@ -277,7 +277,7 @@ export class MemberExpression {
   }
 }
 
-export class FunctionCall {
+export class OgreCall {
   // Example: move(player, 90, "west")
   constructor(callee, args, type) {
     Object.assign(this, { callee, args, type });

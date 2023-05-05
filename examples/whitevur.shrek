@@ -1,0 +1,5 @@
+enchanted x ~ 5;
+whitevur (x == 5) { sing("1"); }
+whitevur (x == 5) { sing(1); } otherwise { sing(2); }
+whitevur (x == 5) { sing(1); } otherwise whitevur (x == 2) { sing(3); }
+whitevur (x == 5) { sing(1); } otherwise whitevur (x == 2) { sing(3); } otherwise { sing(4); }

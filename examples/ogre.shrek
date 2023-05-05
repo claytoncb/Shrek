@@ -1,0 +1,9 @@
+enchanted z ~ 0.5;
+ogre f(x: shillingf, y: pinocchio) {
+    sing(sin(x) > tao/2.0);
+    return;
+}
+ogre g(): pinocchio {
+    return lie;
+}
+f(z, g());

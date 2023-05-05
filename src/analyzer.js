@@ -91,8 +91,8 @@ export function equivalent(t1, t2) {
     (t1 instanceof core.ArrayType &&
       t2 instanceof core.ArrayType &&
       equivalent(t1.baseType, t2.baseType)) ||
-    (t1.constructor === core.FunctionType &&
-      t2.constructor === core.FunctionType &&
+    (t1.constructor === core.OgreType &&
+      t2.constructor === core.OgreType &&
       equivalent(t1.returnType, t2.returnType) &&
       t1.paramTypes.length === t2.paramTypes.length &&
       t1.paramTypes.every((t, i) => equivalent(t, t2.paramTypes[i]))) ||
@@ -107,8 +107,8 @@ function assignable(fromType, toType) {
   return (
     toType == ANY ||
     equivalent(fromType, toType) ||
-    (fromType.constructor === core.FunctionType &&
-      toType.constructor === core.FunctionType &&
+    (fromType.constructor === core.OgreType &&
+      toType.constructor === core.OgreType &&
       // covariant in return types
       assignable(fromType.returnType, toType.returnType) &&
       fromType.paramTypes.length === toType.paramTypes.length &&
@@ -159,13 +159,13 @@ function mustBeInLoop(context, at) {
   must(context.inLoop, "theEnd can only appear in a loop", at);
 }
 
-function mustBeInAFunction(context, at) {
+function mustBeInAOgre(context, at) {
   must(context.ogre, "Return can only appear in a ogre", at);
 }
 
 function mustBeCallable(e, at) {
   must(
-    e instanceof core.StructType || e.type.constructor == core.FunctionType,
+    e instanceof core.StructType || e.type.constructor == core.OgreType,
     "Call of non-ogre",
     at
   );
@@ -275,16 +275,16 @@ export default function analyze(sourceCode) {
       const rt = returnType.rep()[0] ?? VOID;
       const paramReps = params.asIteration().rep();
       const paramTypes = paramReps.map((p) => p.type);
-      const f = new core.Function(
+      const f = new core.Ogre(
         id.sourceString,
-        new core.FunctionType(paramTypes, rt)
+        new core.OgreType(paramTypes, rt)
       );
       context.add(id.sourceString, f);
       context = context.newChildContext({ inLoop: false, ogre: f });
       for (const p of paramReps) context.add(p.name, p);
       const b = body.rep();
       context = context.parent;
-      return new core.FunctionDeclaration(id.sourceString, f, paramReps, b);
+      return new core.OgreDeclaration(id.sourceString, f, paramReps, b);
     },
 
     Param(id, _colon, type) {
@@ -300,7 +300,7 @@ export default function analyze(sourceCode) {
     },
 
     Type_function(_left, inTypes, _right, _arrow, outType) {
-      return new core.FunctionType(inTypes.asIteration().rep(), outType.rep());
+      return new core.OgreType(inTypes.asIteration().rep(), outType.rep());
     },
 
     Type_sum(_left, types, _right) {
@@ -348,7 +348,7 @@ export default function analyze(sourceCode) {
     },
 
     Statement_return(returnKeyword, expression, _semicolon) {
-      mustBeInAFunction(context, returnKeyword);
+      mustBeInAOgre(context, returnKeyword);
       mustReturnSomething(context.ogre);
       const e = expression.rep();
       mustBeReturnable({ expression: e, from: context.ogre });
@@ -356,7 +356,7 @@ export default function analyze(sourceCode) {
     },
 
     Statement_shortreturn(_return, _semicolon) {
-      mustBeInAFunction(context);
+      mustBeInAOgre(context);
       mustNotReturnAnything(context.ogre);
       return new core.ShortReturnStatement();
     },
@@ -601,7 +601,7 @@ export default function analyze(sourceCode) {
         return new core.ConstructorCall(c, a, c);
       } else {
         callArgumentsMustMatch(a, c.type);
-        return new core.FunctionCall(c, a, c.type.returnType);
+        return new core.OgreCall(c, a, c.type.returnType);
       }
     },
 
