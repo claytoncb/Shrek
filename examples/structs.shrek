@@ -1,0 +1,5 @@
+struct S { x: shilling }
+enchanted y ~ S(3);
+enchanted x ~ some S(3);
+sing(y.x);
+sing(x?.x);

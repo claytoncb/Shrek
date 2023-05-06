@@ -50,7 +50,7 @@ function mustHaveAnArrayType(e, at) {
 }
 
 function mustHaveAnOptionalType(e, at) {
-  must(e.type instanceof core.OptionalType, "Expected an optional", at);
+  must((e.type instanceof core.SumType && e.type?.types?.includes(core.Type.VOID)), "Expected an optional", at);
 }
 
 function mustHaveAStructType(e, at) {
@@ -59,8 +59,11 @@ function mustHaveAStructType(e, at) {
 
 function mustHaveOptionalStructType(e, at) {
   must(
-    e.type instanceof core.OptionalType &&
-      e.type.baseType.constructor == core.StructType,
+    ((e.type instanceof core.SumType) &&
+      e.type?.types.includes(core.Type.VOID) &&
+      e.type?.types.includes(core.Type.StructType)) ||
+      ((e.type instanceof core.OptionalType)||(e.type instanceof core.EmptyOptional) &&
+       (e.type?.baseType instanceof core.Type.StructType)),
     "Expected an optional struct",
     at
   );
@@ -85,9 +88,6 @@ function mustNotBeRecursive(struct, at) {
 export function equivalent(t1, t2) {
   return (
     t1 === t2 ||
-    (t1 instanceof core.OptionalType &&
-      t2 instanceof core.OptionalType &&
-      equivalent(t1.baseType, t2.baseType)) ||
     (t1 instanceof core.ArrayType &&
       t2 instanceof core.ArrayType &&
       equivalent(t1.baseType, t2.baseType)) ||
@@ -116,13 +116,13 @@ function assignable(fromType, toType) {
       toType.paramTypes.every((t, i) =>
         assignable(t, fromType.paramTypes[i])
       )) ||
-    (fromType.constructor === core.SumType &&
-      toType.constructor === core.SumType &&
+    ((fromType.constructor === core.SumType || fromType.constructor === core.OptionalType) &&
+      (toType.constructor === core.SumType || toType.constructor === core.OptionalType) &&
       fromType.types.length <= toType.types.length &&
       fromType.types.every((tFrom) =>
         toType.types.some((tTo) => assignable(tFrom, tTo))
       )) ||
-    (toType.constructor === core.SumType &&
+    ((toType.constructor === core.SumType || toType.constructor === core.OptionalType) &&
       toType.types.some((t) => assignable(fromType, t))) ||
     (fromType instanceof core.ArrayType &&
       toType instanceof core.ArrayType &&
@@ -292,7 +292,7 @@ export default function analyze(sourceCode) {
     },
 
     Type_optional(baseType, _questionMark) {
-      return new core.OptionalType(baseType.rep());
+      return new core.SumType([baseType.rep(), core.Type.VOID]);
     },
 
     Type_array(_left, baseType, _right) {

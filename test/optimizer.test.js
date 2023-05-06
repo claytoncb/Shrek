@@ -95,8 +95,8 @@ const tests = [
       xpp,
     ],
   //   ["optimizes away nil", unwrapElse(emptyOptional, 3), 3],
-  //   ["optimizes left conditional true", conditional(true, 55, 89), 55],
-  //   ["optimizes left conditional false", conditional(false, 55, 89), 89],
+  ["optimizes left conditional true", conditional(true, 55, 89), 55],
+  ["optimizes left conditional false", conditional(false, 55, 89), 89],
   //   ["optimizes in functions", intFun(return1p1), intFun(return2)],
   ["optimizes in subscripts", sub(a, onePlusTwo), sub(a, 3)],
   ["optimizes in array literals", array(0, onePlusTwo, 9), array(0, 3, 9)],
@@ -119,14 +119,14 @@ const tests = [
         new core.Variable("x", false, core.Type.SHILLING),
         new core.EmptyArray(core.Type.SHILLING)
       ),
-      //       new core.VariableDeclaration(
-      //         "r",
-      //         false,
-      //         new core.EmptyOptional(core.Type.INT)
-      //       ),
+      new core.VariableDeclarationRef(
+        "r",
+        false,
+        new core.EmptyOptional(core.Type.SHILLING)
+      ),
       new core.WhileStatement(true, [new core.TheEndStatement()]),
       new core.RepeatStatement(5, [new core.ReturnStatement(1)]),
-      //       conditional(x, 1, 2),
+      conditional(x, 1, 2),
       //       unwrapElse(some(x), 7),
       new core.WhitevurStatement(x, [], []),
       new core.ShortWhitevurStatement(x, []),

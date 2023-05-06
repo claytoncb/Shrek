@@ -118,13 +118,7 @@ export class SumType extends Type {
   }
 }
 
-export class OptionalType extends Type {
-  // Example: string?
-  constructor(baseType) {
-    super(`${baseType.description}?`);
-    this.baseType = baseType;
-  }
-}
+
 
 export class Increment {
   // Example: count++
@@ -237,7 +231,15 @@ export class EmptyOptional {
   // Example: no int
   constructor(baseType) {
     this.baseType = baseType;
-    this.type = new OptionalType(baseType);
+    this.type = new SumType([baseType, Type.VOID]);
+  }
+}
+
+export class OptionalType extends SumType {
+  // Example: string?
+  constructor(baseType) {
+    super([baseType, Type.VOID]);
+    this.baseType = baseType
   }
 }
 
@@ -273,7 +275,7 @@ export class MemberExpression {
   // Example: state.population
   constructor(object, field, isOptional) {
     Object.assign(this, { object, field, isOptional });
-    this.type = isOptional ? new OptionalType(field.type) : field.type;
+    this.type = isOptional ? new SumType([field.type, Type.VOID]) : field.type;
   }
 }
 

@@ -113,8 +113,10 @@ const fixtures = [
     name: "structs",
     source: `
       struct S { x: shilling }
-      enchanted x ~ S(3);
-      sing(x.x);
+      enchanted y ~ S(3);
+      enchanted x ~ some S(3);
+      sing(y.x);
+      sing(x?.x);
     `,
     expected: dedent`
       class S_1 {
@@ -122,8 +124,10 @@ const fixtures = [
       this["x_2"] = x_2;
       }
       }
-      let x_3 = new S_1(3);
-      console.log((x_3["x_2"]));
+      let y_3 = new S_1(3);
+      let x_4 = (new S_1(3));
+      console.log((y_3["x_2"]));
+      console.log((x_4?.["x_2"]));
     `,
   },
   {

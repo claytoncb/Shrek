@@ -49,7 +49,7 @@ const semanticChecks = [
   ["recursive structs reference", "struct S {z: S?} enchanted x <- S(no S);"],
   ["nested structs", "struct T{y:shilling} struct S{z: T} enchanted x~S(T(1)); sing(x.z.y);"],
   ["member exp", "struct S {x: shilling} enchanted y ~ S(1);sing(y.x);"],
-  ["optional member exp", "struct S {x: shilling} enchanted y ~ some S(1);sing(y?.x);"],
+  ["optional member exp", "struct S {x: shilling} enchanted y ~ some S(1); sing(y?.x);"],
   ["subscript exp", "enchanted a~[1,2];sing(a[0]);"],
   ["array of struct", "struct S{} enchanted x~[S(), S()];"],
   ["struct of arrays and opts", "struct S{x: [shilling] y: script?}"],
@@ -103,7 +103,7 @@ const semanticErrors = [
   ["assign bad array type", "enchanted x~1;x~[truth];", /Cannot assign a \[pinocchio\] to a shilling/],
   ["assign bad array type", "enchanted x~(<shilling,shillingf>)[];x~[truth];", /Cannot assign a \[pinocchio\] to a \[<shilling,shillingf>\]/],
   ["assign sumtype arrays to sumtype arrays", "enchanted a ~ (<shilling,pinocchio>)[];enchanted b~[1,lie,1.0];a~b;",/Cannot assign a \[<shilling,pinocchio,shillingf>\] to a \[<shilling,pinocchio>\]/],
-  ["assign bad optional type", "enchanted x~1;x~some 2;", /Cannot assign a shilling\? to a shilling/],
+  ["assign bad optional type", "enchanted x~1;x~some 2;", /Cannot assign a <shilling,void> to a shilling/],
   ["theEnd outside loop", "theEnd;", /theEnd can only appear in a loop/],
   [
     "theEnd inside ogre",
