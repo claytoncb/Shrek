@@ -6,4 +6,4 @@ ogre f(x: shillingf, y: pinocchio) {
 ogre g(): pinocchio {
     return lie;
 }
-f(z, g());
+enchanted a <- f(z, g());

@@ -13,7 +13,7 @@ const fixtures = [
   {
     name: "small",
     source: `
-      enchanted x ~ 3 * 7;
+      enchanted x ~ -(3 * 7);
       x++;
       x--;
       enchanted y ~ truth;
@@ -21,7 +21,7 @@ const fixtures = [
       sing((y && y) || lie || (x*2) != 5);
     `,
     expected: dedent`
-      let x_1 = 21;
+      let x_1 = -(21);
       x_1++;
       x_1--;
       let y_2 = true;
@@ -33,14 +33,14 @@ const fixtures = [
     name: "whitevur",
     source: `
       enchanted x ~ 5;
-      whitevur (x == 5) { sing("1"); }
+      whitevur (!(x == 5)) { sing("1"); }
       whitevur (x == 5) { sing(1); } otherwise { sing(2); }
       whitevur (x == 5) { sing(1); } otherwise whitevur (x == 2) { sing(3); }
       whitevur (x == 5) { sing(1); } otherwise whitevur (x == 2) { sing(3); } otherwise { sing(4); }
     `,
     expected: dedent`
       let x_1 = 5;
-      if ((x_1 === 5)) {
+      if (!((x_1 === 5))) {
         console.log("1");
       }
       if ((x_1 === 5)) {
@@ -76,7 +76,7 @@ const fixtures = [
           y ~ y + 1;
           theEnd;
         }
-        x ~ x + 1;
+        x <- x + 1;
        }
     `,
     expected: dedent`
@@ -97,13 +97,15 @@ const fixtures = [
     source: `
     enchanted a ~ [truth, lie, truth];
     enchanted b ~ [10, #a - 20, 30];
-    enchanted c ~ [1,lie,"s"];
+    enchanted c ~ some [1,lie,"s"];
+    enchanted d ~ (shilling) [];
     sing(a[1] || (b[0] < 88 ? lie : truth));
     `,
     expected: dedent`
     let a_1 = [true,false,true];
     let b_2 = [10,(#(a_1) - 20),30];
-    let c_3 = {0: 1,1: false,2: "s"};
+    let c_3 = ({0: 1,1: false,2: "s"});
+    let d_4 = [];
     console.log((a_1[1] || (((b_2[0] < 88)) ? (false) : (true))));
     `,
   },
@@ -162,18 +164,19 @@ const fixtures = [
         ogre g(): pinocchio {
             return lie;
         }
-        f(z, g());
+        enchanted a <- f(z, g());
     `,
     expected: dedent`
-    let z_1 = 0.5;
-    function f_2(x_3, y_4) {
-    console.log((Math.sin(x_3) > ((Math.PI*2) / 2)));
-    return;
-    }
-    function g_5() {
-    return false;
-    }
-    f_2(z_1, g_5());
+        let z_1 = 0.5;
+        function f_2(x_3, y_4) {
+        console.log((Math.sin(x_3) > ((Math.PI*2) / 2)));
+        return;
+        }
+        function g_5() {
+        return false;
+        }
+        f_2(z_1, g_5());
+        let a_6 = undefined;
     `,
   },
 ]

@@ -79,21 +79,21 @@ const tests = [
   ["optimizes short-if-false", [new core.ShortWhitevurStatement(false, xpp)], []],
   ["optimizes while-false", [new core.WhileStatement(false, xpp)], []],
   ["optimizes repeat-0", [new core.RepeatStatement(0, xpp)], []],
-  //   [
-  //     "optimizes for-range",
-  //     [new core.ForRangeStatement(x, 5, "...", 3, xpp)],
-  //     [],
-  //   ],
-  // [
-  //   "optimizes for-empty-array",
-  //   [new core.ForStatement(x, emptyArray, xpp)],
-  //   [],
-  // ],
-  //   [
-  //     "applies if-false after folding",
-  //     new core.ShortIfStatement(eq(1, 1), xpp),
-  //     xpp,
-  //   ],
+    [
+      "optimizes for-range",
+      [new core.ForRangeStatement(x, 5, "...", 3, xpp)],
+      [],
+    ],
+  [
+    "optimizes for-empty-array",
+    [new core.ForStatement(x, emptyArray, xpp)],
+    [],
+  ],
+    [
+      "applies if-false after folding",
+      new core.ShortWhitevurStatement(eq(1, 1), xpp),
+      xpp,
+    ],
   //   ["optimizes away nil", unwrapElse(emptyOptional, 3), 3],
   //   ["optimizes left conditional true", conditional(true, 55, 89), 55],
   //   ["optimizes left conditional false", conditional(false, 55, 89), 89],
@@ -104,10 +104,12 @@ const tests = [
   [
     "passes through nonoptimizable constructs",
     ...Array(2).fill([
-      //       new core.Program([new core.ShortReturnStatement()]),
-      //       new core.VariableDeclaration("x", true, "z"),
-      //       new core.TypeDeclaration([new core.Field("x", core.Type.INT)]),
-      //       new core.Assignment(x, new core.BinaryExpression("*", x, "z")),
+      new core.Program([new core.ShortReturnStatement()]),
+      new core.VariableDeclarationRef("x", true, "z"),
+      new core.VariableDeclarationVal("x", true, "z"),
+      new core.TypeDeclaration([new core.Field("x", core.Type.SHILLING)]),
+      new core.AssignmentRef(x, new core.BinaryExpression("*", x, "z")),
+      new core.AssignmentVal(x, new core.BinaryExpression("*", x, "z")),
       new core.AssignmentVal(b, new core.UnaryExpression("!", b)),
       new core.ConstructorCall(
         identity,
@@ -122,14 +124,15 @@ const tests = [
       //         false,
       //         new core.EmptyOptional(core.Type.INT)
       //       ),
-      //       new core.WhileStatement(true, [new core.BreakStatement()]),
-      //       new core.RepeatStatement(5, [new core.ReturnStatement(1)]),
+      new core.WhileStatement(true, [new core.TheEndStatement()]),
+      new core.RepeatStatement(5, [new core.ReturnStatement(1)]),
       //       conditional(x, 1, 2),
       //       unwrapElse(some(x), 7),
-      //       new core.IfStatement(x, [], []),
-      //       new core.ShortIfStatement(x, []),
-      //       new core.ForRangeStatement(x, 2, "..<", 5, []),
-      //       new core.ForStatement(x, array(1, 2, 3), []),
+      new core.WhitevurStatement(x, [], []),
+      new core.ShortWhitevurStatement(x, []),
+      new core.ForRangeStatement(x, 2, "..<", 5, []),
+      
+      new core.ForStatement(x, array(1, 2, 3), []),
     ]),
   ],
 ];

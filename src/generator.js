@@ -49,6 +49,7 @@ export default function generate(program) {
       output.push(`let ${gen(d.variable)} = ${[gen(d.initializer)][0]};`)
     },
     VariableDeclarationRef(d) {
+      console.log(d)
       // We don't care about const vs. let in the generated code! The analyzer has
       // already checked that we never updated a const, so let is always fine.
       output.push(`let ${gen(d.variable)} = ${gen(d.initializer)};`)
@@ -158,9 +159,6 @@ export default function generate(program) {
         e.op = ""
       }
       return `${e.op}(${gen(e.operand)})`
-    },
-    EmptyOptional(e) {
-      return "undefined"
     },
     SubscriptExpression(e) {
       return `${gen(e.array)}[${gen(e.index)}]`
